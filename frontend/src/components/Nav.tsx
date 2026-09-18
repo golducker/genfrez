@@ -18,7 +18,7 @@ export default function Nav() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-3 text-text-display">
           <Logo size={24} />
-          <span className="font-mono text-[13px] tracking-[0.08em] uppercase">GenFreZ</span>
+          <span className="hidden sm:inline font-mono text-[13px] tracking-[0.08em] uppercase">GenFreZ</span>
         </Link>
         <nav aria-label="Primary" className="flex items-center gap-3 sm:gap-8">
           {links.map((l) => {
