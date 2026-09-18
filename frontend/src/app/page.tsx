@@ -11,7 +11,7 @@ export default function Home() {
       <section className="relative overflow-hidden">
         <div className="dot-grid-subtle absolute inset-0 opacity-60" aria-hidden="true" />
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-20 sm:pt-32 pb-16 sm:pb-24">
-          <div className="flex items-center gap-3 t-label">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 t-label">
             <span>{site.event}</span>
             <span aria-hidden="true">·</span>
             <span>{site.city}</span>

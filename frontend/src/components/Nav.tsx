@@ -20,7 +20,7 @@ export default function Nav() {
           <Logo size={24} />
           <span className="font-mono text-[13px] tracking-[0.08em] uppercase">GenFreZ</span>
         </Link>
-        <nav aria-label="Primary" className="flex items-center gap-4 sm:gap-8">
+        <nav aria-label="Primary" className="flex items-center gap-3 sm:gap-8">
           {links.map((l) => {
             const active = l.href === "/" ? path === "/" : path.startsWith(l.href);
             return (
@@ -28,7 +28,7 @@ export default function Nav() {
                 key={l.href}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
-                className={`font-mono text-[11px] sm:text-[12px] tracking-[0.08em] uppercase transition-colors duration-200 ${active ? "text-text-display" : "text-text-disabled hover:text-text-secondary"}`}
+                className={`font-mono text-[11px] sm:text-[12px] tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-200 ${active ? "text-text-display" : "text-text-disabled hover:text-text-secondary"}`}
               >
                 {active ? `[ ${l.label} ]` : l.label}
               </Link>
