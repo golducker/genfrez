@@ -1,6 +1,6 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "frontend", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "cwd": "frontend", "port": 3000 }
+    { "name": "frontend", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "-p", "3017"], "cwd": "frontend", "port": 3017 }
   ]
 }

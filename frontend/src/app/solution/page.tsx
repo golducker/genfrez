@@ -227,7 +227,7 @@ export default function Solution() {
                 ["Funding ask · 18 months runway", "~1.9 B ₫"],
                 ["Cross-subsidy fund, net per year", "+21.6 M ₫"],
                 ["Transacting users at exit", "3,000 · 4 txn/mo"],
-                ["Points issued per 5 km e-bike trip", "13 · pilot budget 0.3"],
+                ["Points issued per 5 km e-bike trip", "4 · pilot budget 0.3"],
               ].map(([k, v]) => (
                 <div key={k} className="row grid-cols-[1fr_auto] py-3">
                   <dt className="t-label pt-0.5">{k}</dt>
