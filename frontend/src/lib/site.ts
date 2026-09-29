@@ -35,6 +35,7 @@ export const team: Member[] = [
     name: "Nguyễn Bảo Linh",
     role: "Business model",
     bio: "Owns the business model canvas: three customer groups, earn-and-redeem point economics and Year 1 numbers that survive a judge's spreadsheet.",
+    photo: "/team/linh.jpg",
   },
   {
     name: "Lê Phạm Bảo Mai",
@@ -55,10 +56,12 @@ export const team: Member[] = [
     name: "Nguyễn Huy Minh",
     role: "Emissions model · Data",
     bio: "Built the emission-factor table and the four-tier verification architecture that gives every point a confidence coefficient, and the pricing model behind each point.",
+    photo: "/team/minh.jpg",
   },
   {
     name: "Lê Thịnh",
     role: "Product · Engineering",
     bio: "Built the Zalo Mini App demo, the points ledger flow and this site. Cares about the arithmetic being visible to the user.",
+    photo: "/team/thinh.jpg",
   },
 ];
