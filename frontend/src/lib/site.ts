@@ -4,6 +4,7 @@ export const site = {
   subTagline: "Be Z, Be Fresh",
   mission:
     "Make greener moves. Earn rewards you actually want. Ride, walk, share or switch - GenFreZ turns your everyday green choices into points you can spend.",
+  url: "https://genfrez.vercel.app",
   demoUrl: "https://hackathon-i-hons-msop.vercel.app/",
   /** Paste a YouTube video ID here to show the demo video on the Solution page. */
   demoVideoId: "",
