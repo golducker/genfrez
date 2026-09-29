@@ -179,7 +179,7 @@ export default function SolutionSection() {
           <div className="grid gap-8">
             {hasVideoFile ? (
               <div className="aspect-video rounded-[28px] overflow-hidden bg-black">
-                <video className="w-full h-full" controls preload="metadata" playsInline title="GenFreZ demo video">
+                <video className="w-full h-full" controls preload="metadata" playsInline poster={`/${site.demoVideoPoster}`} title="GenFreZ demo video">
                   <source src={`/${site.demoVideoFile}`} type="video/mp4" />
                 </video>
               </div>

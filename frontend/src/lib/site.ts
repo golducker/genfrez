@@ -8,7 +8,8 @@ export const site = {
   /** Paste a YouTube video ID here to show the demo video on the Solution page. */
   demoVideoId: "",
   /** Local demo video. Drop the file into frontend/public/ and it shows on the Solution page automatically. */
-  demoVideoFile: "0928.mp4",
+  demoVideoFile: "demo.mp4",
+  demoVideoPoster: "demo-poster.jpg",
   event: "FTU-UQ i-HONS Business Hackathon 2026",
   city: "Hanoi",
   contactEmail: "customerservice@genfrez.vn",
