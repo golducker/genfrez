@@ -15,10 +15,10 @@ export const site = {
   city: "Hanoi",
   contactEmail: "customerservice@genfrez.vn",
   socials: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/" },
-    { label: "Facebook", href: "https://www.facebook.com/" },
-    { label: "Zalo OA", href: "https://zalo.me/" },
-    { label: "GitHub", href: "https://github.com/golducker/Hackathon-i-Hons" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/ftu-uq-ihons" },
+    { label: "Facebook", href: "https://web.facebook.com/CTTT.iHonsUQ" },
+    { label: "Zalo OA", href: "https://youtu.be/dQw4w9WgXcQ" },
+    { label: "GitHub", href: "https://github.com/golducker" },
   ],
 };
 
