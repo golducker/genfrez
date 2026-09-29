@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Doto, Space_Grotesk, Space_Mono } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import ClickFx from "@/components/ClickFx";
 import { site } from "@/lib/site";
 
-const doto = Doto({ variable: "--font-doto", subsets: ["latin"], weight: ["400", "700"] });
-const grotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin", "vietnamese"], weight: ["300", "400", "500"] });
-const mono = Space_Mono({ variable: "--font-space-mono", subsets: ["latin", "vietnamese"], weight: ["400", "700"] });
+const montserrat = Montserrat({ variable: "--font-montserrat", subsets: ["latin", "vietnamese"] }); // variable font: all weights in one file
 
 export const metadata: Metadata = {
   title: { default: `${site.name} — ${site.tagline}`, template: `%s · ${site.name}` },
@@ -15,13 +14,21 @@ export const metadata: Metadata = {
   openGraph: { title: `${site.name} — ${site.tagline}`, description: site.mission, type: "website" },
 };
 
+/* Applies a saved theme choice before first paint so there is no flash. */
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${doto.variable} ${grotesk.variable} ${mono.variable} h-full antialiased`}>
+    <html lang="en" className={`${montserrat.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-full flex flex-col">
+        <a href="#main" className="skip-link">Skip to content</a>
         <Nav />
-        <main className="flex-1">{children}</main>
+        <main id="main" className="flex-1">{children}</main>
         <Footer />
+        <ClickFx />
       </body>
     </html>
   );

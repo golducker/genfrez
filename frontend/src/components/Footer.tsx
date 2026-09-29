@@ -1,31 +1,45 @@
 import Link from "next/link";
+import Logo, { Wordmark } from "./Logo";
+import ThemeToggle from "./ThemeToggle";
+import { SoundToggle } from "./ClickFx";
 import { site } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border mt-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 grid gap-6 sm:grid-cols-3">
-        <div>
-          <p className="t-label">GenFreZ</p>
-          <p className="mt-2 text-text-secondary text-[14px]">Your green reward platform. {site.city}, 2026.</p>
+    <footer className="tone-navy mt-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="flex items-start gap-4">
+          <Logo size={64} className="shrink-0" />
+          <div>
+            <Wordmark className="text-[24px] text-text-display" />
+            <p className="mt-1 text-[15px] font-semibold text-text-display">{site.tagline}</p>
+            <p className="mt-1 text-text-secondary text-[14px]">{site.subTagline} · {site.city}, 2026</p>
+          </div>
         </div>
         <div>
-          <p className="t-label">Links</p>
-          <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+          <p className="t-label">Follow us</p>
+          <ul className="mt-3 grid gap-2">
             {site.socials.map((s) => (
               <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noreferrer" className="font-mono text-[12px] tracking-[0.04em] uppercase text-text-secondary hover:text-text-display transition-colors">
-                  {s.label}
+                <a href={s.href} target="_blank" rel="noreferrer" className="text-[15px] text-text-primary hover:text-accent-text transition-colors">
+                  {s.label} ↗
                 </a>
               </li>
             ))}
           </ul>
         </div>
-        <div className="sm:text-right">
-          <p className="t-label">{site.event}</p>
-          <p className="mt-2 font-mono text-[12px] text-text-disabled">
-            <Link href="/contact" className="hover:text-text-primary transition-colors">{site.contactEmail}</Link>
-          </p>
+        <div className="grid gap-4 content-start">
+          <div>
+            <p className="t-label">Say hi</p>
+            <Link href="/#contact" className="mt-3 block text-[15px] text-text-primary hover:text-accent-text transition-colors break-all">
+              {site.contactEmail}
+            </Link>
+          </div>
+          <p className="t-caption">{site.event}</p>
+          <div className="flex gap-2">
+            <ThemeToggle />
+            <SoundToggle />
+          </div>
         </div>
       </div>
     </footer>

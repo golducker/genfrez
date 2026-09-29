@@ -3,8 +3,8 @@ import { site } from "@/lib/site";
 export default function PhoneFrame() {
   return (
     <div className="mx-auto w-[300px] sm:w-[340px]">
-      <div className="rounded-[28px] border border-border-visible bg-surface p-2">
-        <div className="rounded-[20px] overflow-hidden bg-black border border-border" style={{ aspectRatio: "9 / 19" }}>
+      <div className="rounded-[40px] bg-[#0d2440] p-3 shadow-[0_30px_60px_-30px_rgb(0_0_0/0.6)]">
+        <div className="rounded-[30px] overflow-hidden bg-black" style={{ aspectRatio: "9 / 19" }}>
           <iframe
             src={site.demoUrl}
             title="GenFreZ Zalo Mini App demo"
@@ -16,7 +16,7 @@ export default function PhoneFrame() {
       </div>
       <p className="t-caption mt-3 text-center">
         Live demo ·{" "}
-        <a href={site.demoUrl} target="_blank" rel="noreferrer" className="text-text-primary hover:text-text-display">
+        <a href={site.demoUrl} target="_blank" rel="noreferrer" className="font-semibold text-text-display hover:text-accent-text">
           open full screen ↗
         </a>
       </p>

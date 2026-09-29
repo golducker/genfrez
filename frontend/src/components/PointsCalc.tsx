@@ -28,18 +28,18 @@ export default function PointsCalc() {
   }, [km, m]);
 
   return (
-    <div className="border border-border-visible rounded-2xl p-6 sm:p-8 grid gap-8 lg:grid-cols-[1fr_1fr]">
+    <div className="card p-6 sm:p-10 grid gap-10 lg:grid-cols-[1fr_1fr]">
       <div className="grid gap-6">
         <div>
           <div className="flex items-baseline justify-between">
             <label htmlFor="km" className="t-label">Trip distance</label>
             <span className="t-data text-[13px] text-text-display">{km} km</span>
           </div>
-          <input id="km" type="range" min={1} max={30} step={1} value={km} onChange={(e) => setKm(Number(e.target.value))} className="mt-3 w-full accent-white" />
+          <input id="km" type="range" min={1} max={30} step={1} value={km} onChange={(e) => setKm(Number(e.target.value))} className="mt-3 w-full accent-[var(--orange)]" />
         </div>
         <div>
           <p className="t-label mb-3">Instead of a petrol motorbike, you took</p>
-          <div className="inline-grid grid-cols-2 sm:grid-cols-4 border border-border-visible rounded-lg overflow-hidden" role="radiogroup" aria-label="Transport mode">
+          <div className="inline-grid grid-cols-2 sm:grid-cols-4 gap-1 rounded-full bg-surface-raised p-1" role="radiogroup" aria-label="Transport mode">
             {MODES.map((x) => (
               <button
                 key={x.id}
@@ -47,7 +47,7 @@ export default function PointsCalc() {
                 role="radio"
                 aria-checked={mode === x.id}
                 onClick={() => setMode(x.id)}
-                className={`h-10 px-4 font-mono text-[11px] tracking-[0.08em] uppercase transition-colors duration-200 ${mode === x.id ? "bg-text-display text-black" : "text-text-secondary hover:text-text-display"}`}
+                className={`h-10 px-4 rounded-full text-[14px] font-bold transition-colors duration-200 ${mode === x.id ? "bg-accent text-ink" : "text-text-secondary hover:text-text-display"}`}
               >
                 {x.label}
               </button>
@@ -73,20 +73,20 @@ export default function PointsCalc() {
       <div className="grid content-between gap-8">
         <div>
           <p className="t-label">Avoided CO₂</p>
-          <p className="t-display text-[56px] sm:text-[72px] mt-2 flex items-baseline gap-2">
+          <p className="t-display text-[64px] sm:text-[88px] mt-2 flex items-baseline gap-2">
             <span>{r.avoided.toLocaleString("en-US")}</span>
-            <span className="font-mono text-[12px] tracking-[0.08em] uppercase text-text-secondary font-normal">g</span>
+            <span className="text-[18px] font-bold text-text-secondary">g</span>
           </p>
           <SegBar value={Math.min(1, r.avoided / 2850)} segments={24} tone="good" height={8} />
         </div>
         <div className="grid grid-cols-2 gap-6">
           <div>
             <p className="t-label">Points issued</p>
-            <p className="t-data text-[32px] text-text-display mt-1">{r.points}</p>
+            <p className="t-data text-[36px] text-text-display mt-1">{r.points}</p>
           </div>
           <div>
             <p className="t-label">Voucher value</p>
-            <p className="t-data text-[32px] text-text-display mt-1">{r.vnd.toLocaleString("en-US")} ₫</p>
+            <p className="t-data text-[36px] text-text-display mt-1">{r.vnd.toLocaleString("en-US")} ₫</p>
           </div>
         </div>
         <p className="t-caption">points = avoided g ÷ 25 × confidence × additionality × budget. Same formula as the ledger.</p>

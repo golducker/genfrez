@@ -19,7 +19,7 @@ export default function ContactForm() {
       setState({ status: "sent", id: json.id ?? "" });
       form.reset();
     } catch (err) {
-      setState({ status: "error", message: err instanceof Error ? err.message : "Something went wrong." });
+      setState({ status: "error", message: err instanceof Error ? err.message : "Unknown error" });
     }
   }
 
@@ -38,7 +38,7 @@ export default function ContactForm() {
         </div>
       </div>
       <div>
-        <label htmlFor="organisation" className="t-label">Organisation <span className="text-text-disabled">· optional</span></label>
+        <label htmlFor="organisation" className="t-label">Organisation <span className="normal-case tracking-normal font-medium text-text-disabled">· optional</span></label>
         <input id="organisation" name="organisation" autoComplete="organization" className="field mt-2" placeholder="Company, university, fund" />
       </div>
       <div>
@@ -46,12 +46,12 @@ export default function ContactForm() {
         <textarea id="message" name="message" required minLength={10} rows={5} className="field mt-2 resize-y" placeholder="Tell us what you have in mind." />
       </div>
       <div className="flex flex-wrap items-center gap-4">
-        <button type="submit" className="btn btn-primary" disabled={busy}>
-          {busy ? "[ SENDING ]" : "Send message"}
+        <button type="submit" className="btn btn-primary btn-lg" disabled={busy}>
+          {busy ? "Sending…" : "Send message"}
         </button>
         <p className="t-caption" aria-live="polite">
-          {state.status === "sent" && <span className="text-success">[SENT] Thanks. We reply within two working days.</span>}
-          {state.status === "error" && <span className="text-accent">[ERROR: {state.message}]</span>}
+          {state.status === "sent" && <span className="font-semibold text-success">Sent. We reply within two working days.</span>}
+          {state.status === "error" && <span className="font-semibold text-[#d6452f]">Something went wrong on our side. Try again in a minute. ({state.message})</span>}
         </p>
       </div>
     </form>
