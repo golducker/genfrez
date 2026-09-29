@@ -226,4 +226,7 @@ a.pill:active, header nav a:active, button:not(.btn):active { transform: scale(0
     .reveal { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%; }
   }
 }
+/* Fallback reveal (Safari, Firefox): ClickFx adds .reveal-io and then .in as each element enters. */
+.reveal-io { opacity: 0; transform: translateY(28px); transition: opacity 700ms cubic-bezier(.2,.8,.2,1), transform 700ms cubic-bezier(.2,.8,.2,1); }
+.reveal-io.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

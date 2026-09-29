@@ -3,7 +3,10 @@
 import { useEffect, useSyncExternalStore } from "react";
 
 /* Click feedback for every link and button: a short synthesized "pop" (Web Audio, no asset files)
-   plus a ripple on .btn. Sound can be muted; the choice is kept in localStorage. */
+   plus a ripple on .btn. Sound can be muted; the choice is kept in localStorage.
+   The ripple starts on pointerdown so it feels instant; the sound waits for click, because Safari and
+   mobile browsers only unlock audio on a click/tap, not on pointerdown.
+   Also runs the scroll-reveal fallback for browsers without CSS scroll-driven animations. */
 
 let ctx: AudioContext | null = null;
 const listeners = new Set<() => void>();
@@ -24,6 +27,7 @@ function pop(kind: "tap" | "nav" | "cta") {
   if (readMuted()) return;
   try {
     ctx ??= new AudioContext();
+    if (ctx.state === "suspended") void ctx.resume();
     const t = ctx.currentTime;
     const o = ctx.createOscillator();
     const g = ctx.createGain();
@@ -54,16 +58,42 @@ function ripple(el: HTMLElement, e: PointerEvent) {
 
 export default function ClickFx() {
   useEffect(() => {
+    const target = (e: Event) => (e.target as Element | null)?.closest<HTMLElement>("a, button") ?? null;
     function onDown(e: PointerEvent) {
       if (e.button !== 0) return;
-      const el = (e.target as Element | null)?.closest<HTMLElement>("a, button");
-      if (!el) return;
-      const isBtn = el.classList.contains("btn");
-      pop(el.classList.contains("btn-primary") ? "cta" : el.closest("header") ? "nav" : "tap");
-      if (isBtn) ripple(el, e);
+      const el = target(e);
+      if (el?.classList.contains("btn")) ripple(el, e);
+    }
+    function onClick(e: MouseEvent) {
+      const el = target(e);
+      if (el) pop(el.classList.contains("btn-primary") ? "cta" : el.closest("header") ? "nav" : "tap");
     }
     document.addEventListener("pointerdown", onDown);
-    return () => document.removeEventListener("pointerdown", onDown);
+    document.addEventListener("click", onClick, true);
+
+    // Scroll reveal: CSS handles it where animation-timeline exists (Chromium); elsewhere use an observer.
+    let io: IntersectionObserver | undefined;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!still && !CSS.supports("animation-timeline: view()")) {
+      io = new IntersectionObserver(
+        (entries) => entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          en.target.classList.add("in");
+          io!.unobserve(en.target);
+        }),
+        { threshold: 0.12, rootMargin: "0px 0px -5% 0px" }
+      );
+      document.querySelectorAll(".reveal").forEach((el) => {
+        el.classList.add("reveal-io");
+        io!.observe(el);
+      });
+    }
+
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("click", onClick, true);
+      io?.disconnect();
+    };
   }, []);
   return null;
 }
