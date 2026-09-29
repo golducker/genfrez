@@ -53,6 +53,7 @@ export const team: Member[] = [
     name: "Nguyễn Hà Thu",
     role: "Legal · Compliance",
     bio: "Keeps the model inside Decree 13/2023, Decree 52/2024 and the 2025 E-Commerce Law. The 'route, never hold funds' architecture starts here.",
+    photo: "/team/thu.jpg",
   },
   {
     name: "Nguyễn Huy Minh",
