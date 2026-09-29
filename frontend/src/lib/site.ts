@@ -41,11 +41,13 @@ export const team: Member[] = [
     name: "Lê Phạm Bảo Mai",
     role: "Partnerships",
     bio: "Maps the four partner tiers, from Zalo and FPT as foundation partners down to the bubble-tea chains students actually redeem at, and sets how each partner group pays.",
+    photo: "/team/mai.jpg",
   },
   {
     name: "Vũ Uyển Nhi",
     role: "Marketing · Community",
     bio: "Designs the campus ambassador programme, Green Challenges and the leaderboard, so growth comes from peer referrals instead of paid media.",
+    photo: "/team/nhi.jpg",
   },
   {
     name: "Nguyễn Hà Thu",
