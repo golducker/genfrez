@@ -164,7 +164,7 @@ export default function HomeSection() {
           <SegBar label="Bus · ~0 g/km" readout="~ −100%" value={1} tone="good" height={14} />
           <SegBar label="Electric car · 1 passenger · ~93 g/km" readout="−2%" value={0.02} tone="warn" height={14} />
           <p className="text-[15px] text-text-secondary leading-relaxed">
-            A 5 km e-bike trip can avoid 325 g CO₂ compared with a petrol motorbike. That impact becomes points you can actually use.
+            Swap a petrol motorbike for an e-bike on a 5 km trip and you avoid 325 g of CO₂. We turn that into points.
           </p>
         </div>
       </section>
@@ -188,14 +188,14 @@ export default function HomeSection() {
             <article data-reveal="right" className="card card-lift p-8 flex gap-6 items-start">
               <div className="flex-1">
                 <p className="t-label">Green partners</p>
-                <p className="mt-3 text-[18px] font-semibold text-text-display leading-snug">Turn verified green activity into measurable impact and reach young customers.</p>
+                <p className="mt-3 text-[18px] font-semibold text-text-display leading-snug">Pay for a discount only when a verified green rider walks in. Get the CO₂ figures for your reports.</p>
               </div>
               <Mascot name="crowd" scale={0.8} className="shrink-0" />
             </article>
             <article data-reveal="right" className="card card-lift p-8 flex gap-6 items-start">
               <div className="flex-1">
                 <p className="t-label">Banks & e-wallets</p>
-                <p className="mt-3 text-[18px] font-semibold text-text-display leading-snug">Understand green behaviour and build smarter engagement with Gen Z.</p>
+                <p className="mt-3 text-[18px] font-semibold text-text-display leading-snug">See which students switch to the bus, and which rewards made them do it.</p>
               </div>
               <Mascot name="eyes" scale={0.7} className="shrink-0" />
             </article>

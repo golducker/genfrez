@@ -14,10 +14,10 @@ const montserrat = Montserrat({ variable: "--font-montserrat", subsets: ["latin"
 export const metadata: Metadata = {
   // Absolute base so the link-preview image (app/opengraph-image.png) resolves to a full URL.
   metadataBase: new URL(site.url),
-  title: { default: `${site.name} — ${site.tagline}`, template: `%s · ${site.name}` },
+  title: { default: `${site.name} · ${site.tagline}`, template: `%s · ${site.name}` },
   description: site.mission,
-  openGraph: { title: `${site.name} — ${site.tagline}`, description: site.mission, type: "website", siteName: site.name, url: "/", locale: "en_US" },
-  twitter: { card: "summary_large_image", title: `${site.name} — ${site.tagline}`, description: site.mission },
+  openGraph: { title: `${site.name} · ${site.tagline}`, description: site.mission, type: "website", siteName: site.name, url: "/", locale: "en_US" },
+  twitter: { card: "summary_large_image", title: `${site.name} · ${site.tagline}`, description: site.mission },
 };
 
 /* Runs before first paint:

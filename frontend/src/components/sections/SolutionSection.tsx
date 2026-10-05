@@ -83,12 +83,12 @@ export default function SolutionSection() {
       {/* PROBLEM */}
       <Section id="problem" label="01 · The problem" mascot="fluffy-scared" title="Hanoi's greenest choices pay nothing. Its dirtiest one is the default.">
         <p data-scrub className="max-w-4xl text-[24px] sm:text-[34px] font-bold tracking-[-0.02em] text-text-display leading-snug">
-          <Split text="Every kilometre on a petrol motorbike in Hanoi traffic puts out 95 g of CO₂, and the largest, most incentive-responsive generation rides them every day. The bus, the e-bike, their own two feet: none of it pays anything back." />
+          <Split text="Every kilometre on a petrol motorbike in Hanoi traffic puts out 95 g of CO₂, and Gen Z rides them every day. Taking the bus instead pays nothing back." />
         </p>
         {/* TODO(Minh): add a source for the Gen Z share and the fuel-consumption range before publishing. */}
         <div className="mt-12 grid gap-12 lg:grid-cols-3" data-stagger>
           <Stat value="79.6" countTo={79.6} decimals={1} unit="M" label="Zalo monthly active users" note="The distribution channel is already on their phones." source="Zalo, Dec 2025" />
-          <Stat value="25" countTo={25} unit="%" label="Share of population born 1997–2012" note="Gen Z is the largest cohort, the primary motorbike-riding group, and the most incentive-responsive." />
+          <Stat value="25" countTo={25} unit="%" label="Share of population born 1997–2012" note="Gen Z is Vietnam's largest age group, and it rides the most motorbikes." />
           <Stat value="95" countTo={95} unit="g CO₂/km" label="Petrol motorbike, congested urban" note="Real-world consumption runs 3.0 to 7.9 L/100 km in Hanoi stop-and-go traffic." />
         </div>
 
@@ -107,7 +107,7 @@ export default function SolutionSection() {
                 <span className="t-data text-[20px] text-accent-text">02</span>
                 <div>
                   <p className="font-bold text-text-display">Inconvenience</p>
-                  <p className="text-[14px] text-text-secondary mt-1">Alternatives are fragmented, complex and less flexible than riding straight from home. Every extra app is a reason not to switch.</p>
+                  <p className="text-[14px] text-text-secondary mt-1">Every green option needs its own app, and none beats riding straight from your door.</p>
                 </div>
               </div>
             </div>
@@ -126,9 +126,9 @@ export default function SolutionSection() {
       </Section>
 
       {/* HOW IT WORKS */}
-      <Section id="how" label="02 · The AI-powered engine" title="Five coefficients. One published formula. Every point auditable.">
+      <Section id="how" label="02 · The AI-powered engine" title="One published formula prices every point. Anyone can check it.">
         <p className="max-w-2xl text-[17px] text-text-primary leading-relaxed">
-          GenFreZ runs as a Zalo Mini App. Trips and purchases are recorded automatically, converted into avoided emissions, and priced into points by a scoring model. Learned models decide where reward budget goes and who is gaming the system. Rule-based lookups handle anything that has to stay auditable.
+          The GenFreZ Zalo Mini App records your trips and purchases. We work out the CO₂ you avoided and price it in points. Learned models decide where reward budget goes and who is gaming the system. Rule-based lookups handle anything that has to stay auditable.
         </p>
 
         <div className="mt-12">
@@ -206,7 +206,7 @@ export default function SolutionSection() {
           <p className="t-label mb-4">Features · what the platform does</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
             {[
-              ["Nothing to install", "Runs inside Zalo. No new app, account or habit. Missions are recorded automatically."],
+              ["Nothing to install", "Runs inside Zalo. You already have Zalo open. Missions are recorded automatically."],
               ["Fixed, published rate", "1 point = 100 ₫ of voucher = 25 g CO₂ avoided. No badges, no abstract scores."],
               ["Route, never hold funds", "Deep link with a verification token to the partner's checkout. No e-wallet licence, no 50 B ₫ charter capital."],
               ["Anti-fraud by construction", "Frequency caps, plausibility checks, 24–48 h pending state, and additionality that zeroes out round-trip farming."],
@@ -243,7 +243,7 @@ export default function SolutionSection() {
           <div className="card card-lift p-7">
             <p className="t-label">Social</p>
             <p className="t-display text-[48px] mt-3 flex items-baseline gap-2">0<span className="text-[14px] font-bold text-text-secondary">₫ needed to earn</span></p>
-            <p className="text-[14px] text-text-secondary mt-2">Behavioural missions reward students with no spending power. Points track avoided emissions, so a bus ride beats a coffee order. Fairness is a design constraint, not a slogan.</p>
+            <p className="text-[14px] text-text-secondary mt-2">Behavioural missions reward students with no spending power. Points track avoided emissions, so a bus ride beats a coffee order.</p>
             <p className="text-[14px] text-text-secondary mt-3">Campus ambassadors and district leaderboards build habits through peers, not paid media.</p>
           </div>
           <div className="card card-lift p-7">
@@ -258,12 +258,12 @@ export default function SolutionSection() {
         <div data-reveal="scale" className="mt-6 tone-navy card p-8 sm:p-10 grid gap-6 lg:grid-cols-[1fr_2fr]">
           <div>
             <p className="t-label">Scale-up influence</p>
-            <p className="t-display text-[28px] sm:text-[36px] mt-3 leading-tight">From one city to many.</p>
+            <p className="t-display text-[28px] sm:text-[36px] mt-3 leading-tight">Any city with trip data can plug in.</p>
           </div>
           <div className="grid gap-4 text-[15px] text-text-secondary leading-relaxed">
             <p>The engine is not tied to Hanoi. Any city where a partner can send verified trip data can plug into the same formula, the same confidence tiers and the same fixed rate.</p>
             <p>Every partner added widens the set of green choices that earn points, and every rider added makes the behaviour-change data more useful to banks and e-wallets. Impact and revenue grow on the same curve.</p>
-            <p>At scale, avoided emissions become a reportable, audited dataset for partners&apos; GHG inventories, and a proof point for city-level mobility policy.</p>
+            <p>At scale, partners can drop the CO₂ figures straight into their emissions reports, and cities get real data on who switched.</p>
           </div>
         </div>
       </Section>

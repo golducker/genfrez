@@ -49,10 +49,10 @@ export default function AboutSection() {
           </div>
           <div className="grid gap-6 text-[16px] text-text-primary leading-relaxed">
             <p data-scrub className="text-[20px] sm:text-[22px] font-semibold text-text-display leading-snug">
-              <Split text="Most of us ride motorbikes. Not because we love them, but because the alternatives are fragmented, slower door to door, and offer no incentive at all. Cashback apps reward spending. Loyalty schemes reward buying more. Nothing rewards the trip you took by bus instead." />
+              <Split text="Most of us ride motorbikes. The bus is slower door to door, and taking it earns you nothing. Cashback and loyalty apps pay you to buy more. Nobody pays you to take the bus." />
             </p>
             <p>
-              Then two things changed. From July 2026 Hanoi&apos;s subsidised bus trips move to digital e-ticketing. And Zalo, with 79.6M monthly active users (Dec 2025), opened its Mini App platform with location APIs. Suddenly green behaviour in the city could be verified without a new app, a new account or a new habit: GPS and QR today, and e-ticket data once the B2G agreement is signed.
+              Then two things changed. From July 2026 Hanoi&apos;s subsidised bus trips move to digital e-ticketing. And Zalo, with 79.6M monthly active users (Dec 2025), opened its Mini App platform with location APIs. Suddenly green behaviour in the city could be verified inside an app students already have open all day: GPS and QR today, and e-ticket data once the B2G agreement is signed.
             </p>
             <p>
               So we built a points engine where the currency is avoided CO₂, not đồng. A confidence coefficient discounts every point by how good the evidence is. Partners fund a discount only when a rewarded user actually walks into their store. And the surplus from coffee commissions tops up rewards for green rides. The arithmetic is on the{" "}

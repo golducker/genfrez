@@ -14,7 +14,7 @@ export default function ContactSection() {
               <Split text="Want to" /> <Split text="move" className="text-accent-text" /> <Split text="with us?" />
             </h2>
             <p data-reveal className="mt-6 max-w-xl text-[18px] text-text-primary">
-              Have a question, partnership idea, or just want to say hi? Partners, judges, mentors, curious students. We read everything.
+              Partners, judges, mentors, students: write to us. We reply within two working days.
             </p>
           </div>
           <div data-reveal="pop" className="hidden lg:block">

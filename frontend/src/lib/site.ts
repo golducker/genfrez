@@ -3,7 +3,7 @@ export const site = {
   tagline: "Turn Green into Gains",
   subTagline: "Be Z, Be Fresh",
   mission:
-    "Make greener moves. Earn rewards you actually want. Ride, walk, share or switch - GenFreZ turns your everyday green choices into points you can spend.",
+    "Make greener moves. Earn rewards you actually want. Ride, walk, share or switch. GenFreZ turns your everyday green choices into points you can spend.",
   url: "https://genfrez.vercel.app",
   demoUrl: "https://hackathon-i-hons-msop.vercel.app/",
   /** Paste a YouTube video ID here to show the demo video on the Solution page. */
@@ -35,7 +35,7 @@ export const team: Member[] = [
   {
     name: "Nguyễn Bảo Linh",
     role: "Business model",
-    bio: "Owns the business model canvas: three customer groups, earn-and-redeem point economics and Year 1 numbers that survive a judge's spreadsheet.",
+    bio: "Owns the business model canvas. Her Year 1 numbers survive a judge's spreadsheet.",
     photo: "/team/linh.jpg",
   },
   {
@@ -47,7 +47,7 @@ export const team: Member[] = [
   {
     name: "Vũ Uyển Nhi",
     role: "Marketing · Community",
-    bio: "Designs the campus ambassador programme, Green Challenges and the leaderboard, so growth comes from peer referrals instead of paid media.",
+    bio: "Runs the campus ambassador programme and Green Challenges. Growth comes from friends inviting friends, not ads.",
     photo: "/team/nhi.jpg",
   },
   {
@@ -59,13 +59,13 @@ export const team: Member[] = [
   {
     name: "Nguyễn Huy Minh",
     role: "Emissions model · Data",
-    bio: "Built the emission-factor table and the four-tier verification architecture that gives every point a confidence coefficient, and the pricing model behind each point.",
+    bio: "Built the emission-factor table and the four-tier verification system. Every point's confidence coefficient comes from his model.",
     photo: "/team/minh.jpg",
   },
   {
     name: "Lê Thịnh",
     role: "Product · Engineering",
-    bio: "Built the Zalo Mini App demo, the points ledger flow and this site. Cares about the arithmetic being visible to the user.",
+    bio: "Built the Mini App demo and this site. Wants every user to see the maths behind their points.",
     photo: "/team/thinh.jpg",
   },
 ];
