@@ -1,0 +1,202 @@
+/*
+ * Crew passes (CrewPasses.tsx). A navy photo panel over a cream stub, split by a perforated
+ * tear line with a punched hole on each edge. The holes are masks, so they show whatever
+ * page colour sits behind them in every theme. Stub paper stays paper-coloured in dark mode.
+ */
+
+.cp-deck {
+  --cp-top: #13345e;
+  --cp-top-line: rgb(251 246 224 / 0.14);
+  --cp-paper: #fbf6e0;
+  --cp-ink: #13345e;
+  --cp-ink-soft: #4a5c75;
+  --cp-role: #b84a0c;
+  --cp-shade: 19 52 94;
+  --cp-hole: 12px;
+  display: grid;
+  gap: 28px 24px;
+  margin-top: 2.5rem;
+  align-items: start;
+}
+:root[data-theme="dark"] .cp-deck,
+.tone-navy .cp-deck {
+  --cp-top: #1a4272;
+  --cp-paper: #f1e7c3;
+  --cp-shade: 0 6 16;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cp-deck {
+    --cp-top: #1a4272;
+    --cp-paper: #f1e7c3;
+    --cp-shade: 0 6 16;
+  }
+}
+
+@media (min-width: 640px) {
+  .cp-deck { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .cp-deck { grid-template-columns: repeat(3, minmax(0, 1fr)); padding-bottom: 80px; }
+  /* Staggered grid: the middle column rides 80px lower. */
+  .cp-pass:nth-child(3n + 2) { margin-top: 80px; }
+}
+
+/* Phones: a swipe deck with the next pass peeking in. It scrolls inside itself, so the page never widens. */
+@media (max-width: 639px) {
+  .cp-deck {
+    display: flex;
+    gap: 14px;
+    margin-inline: -16px;
+    padding: 4px 16px 28px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 16px;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .cp-deck::-webkit-scrollbar { display: none; }
+  .cp-pass { flex: 0 0 82%; scroll-snap-align: start; }
+}
+
+/* The shadow is a box-shadow on a pseudo-element: it never paints inside its own box,
+   so the punched holes stay see-through instead of filling with shade. */
+.cp-pass { position: relative; isolation: isolate; }
+.cp-pass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 26px;
+  box-shadow: 0 24px 40px -18px rgb(var(--cp-shade) / 0.4);
+  pointer-events: none;
+}
+
+.cp-card {
+  display: grid;
+  transition: transform 400ms cubic-bezier(.2,.8,.2,1);
+}
+
+.cp-top {
+  position: relative;
+  background: var(--cp-top);
+  border-radius: 26px 26px 0 0;
+  padding: 18px 18px 22px;
+  -webkit-mask: radial-gradient(circle var(--cp-hole) at 0 100%, #0000 97%, #000) , radial-gradient(circle var(--cp-hole) at 100% 100%, #0000 97%, #000);
+  -webkit-mask-composite: source-in;
+  mask: radial-gradient(circle var(--cp-hole) at 0 100%, #0000 97%, #000) , radial-gradient(circle var(--cp-hole) at 100% 100%, #0000 97%, #000);
+  mask-composite: intersect;
+}
+.cp-stub {
+  position: relative;
+  background: var(--cp-paper);
+  color: var(--cp-ink);
+  border-radius: 0 0 26px 26px;
+  padding: 22px 24px 26px;
+  -webkit-mask: radial-gradient(circle var(--cp-hole) at 0 0, #0000 97%, #000) , radial-gradient(circle var(--cp-hole) at 100% 0, #0000 97%, #000);
+  -webkit-mask-composite: source-in;
+  mask: radial-gradient(circle var(--cp-hole) at 0 0, #0000 97%, #000) , radial-gradient(circle var(--cp-hole) at 100% 0, #0000 97%, #000);
+  mask-composite: intersect;
+}
+/* Perforated tear line between the two holes. */
+.cp-stub::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--cp-hole) + 8px);
+  right: calc(var(--cp-hole) + 8px);
+  top: -1px;
+  height: 4px;
+  background: radial-gradient(circle at 2px 2px, var(--cp-top) 1.6px, transparent 2.1px) 0 0 / 10px 4px repeat-x;
+}
+
+.cp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.cp-plate {
+  min-width: 56px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: var(--ink);
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 32px;
+  letter-spacing: -0.03em;
+  text-align: center;
+  box-shadow: inset 0 -3px 0 rgb(13 36 64 / 0.18);
+}
+.cp-kind {
+  text-align: right;
+  color: rgb(251 246 224 / 0.72);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.cp-photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border-radius: 18px;
+  background: #0d2440;
+  box-shadow: 0 0 0 1px var(--cp-top-line);
+}
+.cp-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 500ms ease, transform 900ms cubic-bezier(.2,.8,.2,1);
+}
+.cp-duo { filter: url(#cp-duo); }
+.cp-col { opacity: 0; }
+
+/* Full colour on hover, focus, or when the pass is centred in the phone deck. */
+.cp-pass:hover .cp-col,
+.cp-pass:focus-within .cp-col,
+.cp-pass.is-live .cp-col { opacity: 1; }
+.cp-pass:hover .cp-photo img { transform: scale(1.04); }
+
+.cp-initials {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--cream);
+  font-weight: 800;
+  font-size: 64px;
+  letter-spacing: -0.04em;
+}
+
+.cp-no {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cp-ink-soft);
+}
+.cp-name { color: var(--cp-ink); }
+.cp-role { color: var(--cp-role); }
+.cp-bio { color: var(--cp-ink-soft); line-height: 24px; }
+.cp-name { line-height: 32px; }
+.cp-no, .cp-role { line-height: 18px; }
+.cp-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cp-ink);
+}
+.cp-link:hover { color: var(--cp-role); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Colour by default and no tilt. */
+  .cp-col { opacity: 1; }
+  .cp-photo img { transition: none; }
+  .cp-pass:hover .cp-photo img { transform: none; }
+  .cp-card { transform: none !important; }
+}

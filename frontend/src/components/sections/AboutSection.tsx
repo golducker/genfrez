@@ -1,21 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
+import CrewPasses from "@/components/CrewPasses";
 import Mascot from "@/components/Mascot";
 import Split from "@/components/fx/Split";
 import { site, team } from "@/lib/site";
-
-/* Brand tones cycled across team placeholders until real photos arrive. */
-const TILE = ["bg-[var(--leaf-light)] text-[#13345e]", "bg-[var(--sky)] text-[#13345e]", "bg-[#13345e] text-[#fbf6e0]", "bg-[#ffd9bf] text-[#13345e]"];
-
-function Initials({ name, i }: { name: string; i: number }) {
-  const parts = name.trim().split(/\s+/);
-  const initials = (parts[0]?.[0] ?? "") + (parts[parts.length - 1]?.[0] ?? "");
-  return (
-    <div className={`w-full aspect-square rounded-[28px] flex items-center justify-center ${TILE[i % TILE.length]}`} aria-hidden="true">
-      <span className="font-extrabold tracking-[-0.04em] text-[64px]">{initials.toUpperCase()}</span>
-    </div>
-  );
-}
 
 export default function AboutSection() {
   return (
@@ -73,30 +60,7 @@ export default function AboutSection() {
           </h3>
           <p data-reveal className="t-caption">{team.length} members · FTU × UQ</p>
         </div>
-        <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {team.map((m, i) => (
-            <li key={m.name} data-reveal="up" data-tilt="6" className="team-card card p-4 pb-7 grid gap-5 content-start">
-              {m.photo ? (
-                <div data-reveal="clip" className="team-photo relative">
-                  <Image src={m.photo} alt={m.name} width={480} height={480} className="w-full aspect-square object-cover" />
-                </div>
-              ) : (
-                <Initials name={m.name} i={i} />
-              )}
-              <div className="px-3">
-                <p className="t-caption">0{i + 1}</p>
-                <h3 className="t-heading mt-1">{m.name}</h3>
-                <p className="t-label mt-2 text-accent-text">{m.role}</p>
-                <p className="mt-3 text-[15px] text-text-secondary leading-relaxed">{m.bio}</p>
-                {m.linkedin && (
-                  <a href={m.linkedin} target="_blank" rel="noreferrer" className="mt-3 inline-block text-[14px] font-semibold text-text-display hover:text-accent-text">
-                    LinkedIn ↗
-                  </a>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+        <CrewPasses team={team} />
       </section>
 
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
