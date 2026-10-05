@@ -1,0 +1,78 @@
+/* NextStop: chapter-end card as the side of a bus. Classes are prefixed ns-. */
+.ns {
+  --ns-door: #1c4778;
+  --ns-rubber: #0a1a2e;
+  --ns-glass: #a9def2;
+  --ns-glass-2: #6fb6d6;
+  --ns-led: #ff8a2b;
+  --ns-led-bg: #160c05;
+  padding: 0 0 22px;
+}
+:root[data-theme="dark"] .ns { --ns-door: #12305a; --ns-glass: #5a9fbd; --ns-glass-2: #2f6a88; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ns { --ns-door: #12305a; --ns-glass: #5a9fbd; --ns-glass-2: #2f6a88; }
+}
+
+.ns-roof { padding: 18px 22px 0; display: grid; gap: 12px; }
+@media (min-width: 640px) { .ns-roof { padding: 22px 30px 0; } }
+
+/* Dot-matrix sign: plain text masked by a grid of dark dots, scrolled by CSS */
+.ns-sign {
+  position: relative; overflow: hidden; height: 30px; max-width: 360px; border-radius: 6px;
+  background: var(--ns-led-bg); box-shadow: inset 0 0 0 2px #000, 0 0 18px -6px rgb(255 138 43 / 0.6);
+}
+.ns-sign-run { position: absolute; inset: 0 auto 0 0; display: flex; width: max-content; align-items: center; }
+.ns-sign-run > span {
+  padding-right: 0.4em; white-space: nowrap; color: var(--ns-led); font-weight: 800; font-size: 17px;
+  letter-spacing: 0.14em; text-transform: uppercase; text-shadow: 0 0 6px rgb(255 138 43 / 0.9);
+}
+.ns-sign::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle, transparent 0.9px, var(--ns-led-bg) 1.3px) 0 0 / 3px 3px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ns-sign-run { animation: ns-run 16s linear infinite; }
+}
+@keyframes ns-run { to { transform: translateX(-50%); } }
+
+/* Windows: passengers sit low behind the glass */
+.ns-windows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+@media (min-width: 640px) { .ns-windows { grid-template-columns: repeat(5, 1fr); gap: 10px; } }
+.ns-win {
+  position: relative; height: 74px; overflow: hidden; border-radius: 12px 12px 6px 6px;
+  background: linear-gradient(180deg, var(--ns-glass), var(--ns-glass-2));
+  box-shadow: inset 0 0 0 3px var(--ns-rubber);
+}
+.ns-win:nth-child(n + 4) { display: none; }
+@media (min-width: 640px) { .ns-win:nth-child(n + 4) { display: block; } }
+/* Glare streak, drawn over the passenger */
+.ns-win::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.35) 38%, transparent 46%);
+}
+.ns-seat { position: absolute; left: 50%; bottom: -14px; translate: -50% 0; }
+
+/* Content behind the doors */
+.ns-body { position: relative; overflow: clip; }
+.ns-door {
+  display: none; position: absolute; top: 0; bottom: 0; width: 50%; z-index: 3;
+  background: var(--ns-door); will-change: transform;
+}
+.ns.is-live .ns-door { display: block; }
+.ns-door-l { left: 0; box-shadow: inset -5px 0 0 var(--ns-rubber); }
+.ns-door-r { right: 0; box-shadow: inset 5px 0 0 var(--ns-rubber); }
+/* Each half has a tall pane of glass */
+.ns-door > i {
+  position: absolute; top: 14%; bottom: 14%; width: 56%; border-radius: 10px;
+  background: linear-gradient(180deg, var(--ns-glass), var(--ns-glass-2)); opacity: 0.55;
+  box-shadow: inset 0 0 0 3px var(--ns-rubber);
+}
+.ns-door-l > i { right: 16%; }
+.ns-door-r > i { left: 16%; }
+.ns.is-through .ns-door { pointer-events: none; }
+.ns.is-open .ns-door { pointer-events: none; transform: translateX(-100%) !important; transition: transform 500ms cubic-bezier(.2,.8,.2,1); }
+.ns.is-open .ns-door-r { transform: translateX(100%) !important; }
+
+.ns-stripe { height: 12px; margin-top: 4px; background: linear-gradient(180deg, var(--leaf) 0 70%, var(--orange) 70%); }
+
+@media (prefers-reduced-motion: reduce) { .ns-door { display: none !important; } }

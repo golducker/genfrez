@@ -6,6 +6,9 @@ import type { MascotName } from "@/lib/mascots";
 import DemoStage, { type DemoScreen } from "@/components/DemoStage";
 import DemoVideo from "@/components/DemoVideo";
 import RouteSteps from "@/components/RouteSteps";
+import NextStop from "@/components/NextStop";
+import ChapterNum from "@/components/ChapterNum";
+import TicketRail, { type Receipt, type TicketItem } from "@/components/TicketRail";
 import PointsCalc from "@/components/PointsCalc";
 import Split from "@/components/fx/Split";
 import SegBar from "@/components/SegBar";
@@ -13,11 +16,13 @@ import Stat from "@/components/Stat";
 import { site } from "@/lib/site";
 
 /* Mascots only where the copy is not about money or terms. */
-function Section({ id, label, title, mascot, children }: { id: string; label: string; title: string; mascot?: MascotName; children: React.ReactNode }) {
+/* n draws the giant chapter numeral; the header steps aside from it on laptops. */
+function Section({ id, n, label, title, mascot, children }: { id: string; n: number; label: string; title: string; mascot?: MascotName; children: React.ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
-        <div className="flex items-end justify-between gap-6">
+    <section id={id} className="scroll-mt-24 relative">
+      <ChapterNum n={n} />
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
+        <div className={`flex items-end justify-between gap-6 ${n % 2 ? "lg:pl-[30%]" : "lg:pr-[30%]"}`}>
           <div>
             <p data-reveal className="t-label label-rule text-accent-text">{label}</p>
             <h3 data-split className="t-display text-[34px] sm:text-[56px] mt-4 max-w-3xl">
@@ -44,14 +49,20 @@ const DEMO_SCREENS: DemoScreen[] = [
   { title: "Scan", body: "Dynamic QR at bus stops and TNGo stations, cross-checked with GPS.", icon: "scan" },
 ];
 
-function Card({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="card card-lift p-7">
-      <h4 className="text-[18px] font-bold text-text-display">{title}</h4>
-      <p className="mt-2 text-[15px] text-text-secondary leading-relaxed">{body}</p>
-    </div>
-  );
-}
+const FEATURES: TicketItem[] = [
+  { title: "Nothing to install", body: "Runs inside Zalo. You already have Zalo open. Missions are recorded automatically." },
+  { title: "Fixed, published rate", body: "1 point = 100 ₫ of voucher = 25 g CO₂ avoided. No badges, no abstract scores." },
+  { title: "Route, never hold funds", body: "Deep link with a verification token to the partner's checkout. No e-wallet licence, no 50 B ₫ charter capital." },
+  { title: "Anti-fraud by construction", body: "Frequency caps, plausibility checks, 24–48 h pending state, and additionality that zeroes out round-trip farming." },
+  { title: "Emission reports for partners", body: "Transaction-level avoided-emission data with a confidence tier per line, for Decree 06/2022 GHG inventories." },
+];
+
+const RECEIPTS: Receipt[] = [
+  { who: "You", title: "Earn without spending", body: "Bus, walking, off-peak and ride-sharing missions issue points with no transaction. A user with no money still earns.", line: "Cost to earn", value: "0 ₫" },
+  { who: "Community", title: "Community that works", body: "District leaderboards, weekly Green Challenges, Green Ambassadors, and users voting on which partners join next.", line: "Leaderboards", value: "By district" },
+  { who: "Partners", title: "Pay on outcomes", body: "Partners fund a discount only when a rewarded user walks in. Budget risk close to zero.", line: "Paid when", value: "A user walks in" },
+  { who: "Fund", title: "Cross-subsidy fund", body: "Surplus above the 2.5% platform floor on F&B commission tops up rewards for green rides.", line: "Net / year, projected", value: "+21.6 M ₫" },
+];
 
 export default function SolutionSection() {
   const hasVideoFile = fs.existsSync(path.join(process.cwd(), "public", site.demoVideoFile));
@@ -81,7 +92,7 @@ export default function SolutionSection() {
       </section>
 
       {/* PROBLEM */}
-      <Section id="problem" label="01 · The problem" mascot="fluffy-scared" title="Hanoi's greenest choices pay nothing. Its dirtiest one is the default.">
+      <Section id="problem" n={1} label="01 · The problem" mascot="fluffy-scared" title="Hanoi's greenest choices pay nothing. Its dirtiest one is the default.">
         <p data-scrub className="max-w-4xl text-[24px] sm:text-[34px] font-bold tracking-[-0.02em] text-text-display leading-snug">
           <Split text="Every kilometre on a petrol motorbike in Hanoi traffic puts out 95 g of CO₂, and Gen Z rides them every day. Taking the bus instead pays nothing back." />
         </p>
@@ -126,7 +137,7 @@ export default function SolutionSection() {
       </Section>
 
       {/* HOW IT WORKS */}
-      <Section id="how" label="02 · The AI-powered engine" title="One published formula prices every point. Anyone can check it.">
+      <Section id="how" n={2} label="02 · The AI-powered engine" title="One published formula prices every point. Anyone can check it.">
         <p className="max-w-2xl text-[17px] text-text-primary leading-relaxed">
           The GenFreZ Zalo Mini App records your trips and purchases. We work out the CO₂ you avoided and price it in points. Learned models decide where reward budget goes and who is gaming the system. Rule-based lookups handle anything that has to stay auditable.
         </p>
@@ -186,7 +197,7 @@ export default function SolutionSection() {
       </Section>
 
       {/* DEMO */}
-      <Section id="demo" label="03 · Demo" title="The Mini App, running now. Tap it.">
+      <Section id="demo" n={3} label="03 · Demo" title="The Mini App, running now. Tap it.">
         <DemoStage screens={DEMO_SCREENS} />
 
         <div className="mt-20 sm:mt-28">
@@ -201,38 +212,12 @@ export default function SolutionSection() {
       </Section>
 
       {/* FEATURES */}
-      <Section id="features" label="04 · Key features & benefits" title="Built for people who spend often, not big.">
-        <div>
-          <p className="t-label mb-4">Features · what the platform does</p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
-            {[
-              ["Nothing to install", "Runs inside Zalo. You already have Zalo open. Missions are recorded automatically."],
-              ["Fixed, published rate", "1 point = 100 ₫ of voucher = 25 g CO₂ avoided. No badges, no abstract scores."],
-              ["Route, never hold funds", "Deep link with a verification token to the partner's checkout. No e-wallet licence, no 50 B ₫ charter capital."],
-              ["Anti-fraud by construction", "Frequency caps, plausibility checks, 24–48 h pending state, and additionality that zeroes out round-trip farming."],
-              ["Emission reports for partners", "Transaction-level avoided-emission data with a confidence tier per line, for Decree 06/2022 GHG inventories."],
-            ].map(([k, v]) => (
-              <Card key={k} title={k} body={v} />
-            ))}
-          </div>
-        </div>
-        <div className="mt-16">
-          <p className="t-label mb-4">Benefits · what each side gets</p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2" data-stagger>
-            {[
-              ["Earn without spending", "Bus, walking, off-peak and ride-sharing missions issue points with no transaction. A user with no money still earns."],
-              ["Community that works", "District leaderboards, weekly Green Challenges, Green Ambassadors, and users voting on which partners join next."],
-              ["Pay on outcomes", "Partners fund a discount only when a rewarded user walks in. Budget risk close to zero."],
-              ["Cross-subsidy fund", "Surplus above the 2.5% platform floor on F&B commission tops up rewards for green rides. +21.6M ₫ net per year at pilot scale."],
-            ].map(([k, v]) => (
-              <Card key={k} title={k} body={v} />
-            ))}
-          </div>
-        </div>
+      <Section id="features" n={4} label="04 · Key features & benefits" title="Built for people who spend often, not big.">
+        <TicketRail features={FEATURES} receipts={RECEIPTS} />
       </Section>
 
       {/* ESG */}
-      <Section id="esg" label="05 · ESG impact" title="Environmental, social, governance. Measured, not asserted.">
+      <Section id="esg" n={5} label="05 · ESG impact" title="Environmental, social, governance. Measured, not asserted.">
         <div className="grid gap-4 lg:grid-cols-3" data-stagger>
           <div className="card card-lift p-7">
             <p className="t-label">Environmental</p>
@@ -269,7 +254,7 @@ export default function SolutionSection() {
       </Section>
 
       {/* OUTCOMES */}
-      <Section id="outcomes" label="06 · Expected outcomes & metrics" title="Year 1 targets, stated as assumptions.">
+      <Section id="outcomes" n={6} label="06 · Expected outcomes & metrics" title="Year 1 targets, stated as assumptions.">
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
           <div className="grid gap-8">
             <SegBar label="Monthly active users · Q4 target 12,000" readout="1.5k → 12k" value={1} height={12} />
@@ -299,13 +284,19 @@ export default function SolutionSection() {
           </div>
         </div>
 
-        <div data-reveal="scale" className="aurora mt-16 tone-navy card p-8 sm:p-10 flex flex-wrap items-center justify-between gap-6">
-          <div aria-hidden="true" className="aurora-glow" />
-          <p className="t-display text-[28px] sm:text-[40px]">Grow with GenFreZ.</p>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/#contact" className="btn btn-primary btn-lg"><span>Partner with us →</span></Link>
-            <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg"><span>Try the demo ↗</span></a>
-          </div>
+        <div className="mt-16">
+          <NextStop
+            sign="CONTACT · PARTNER WITH US"
+            stop="Contact"
+            passengers={[{ name: "heart-hug", seat: 2 }]}
+            className="p-8 sm:p-10 flex flex-wrap items-center justify-between gap-6"
+          >
+            <p className="t-display text-[28px] sm:text-[40px]">Grow with GenFreZ.</p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/#contact" className="btn btn-primary btn-lg"><span>Partner with us →</span></Link>
+              <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg"><span>Try the demo ↗</span></a>
+            </div>
+          </NextStop>
         </div>
       </Section>
     </>

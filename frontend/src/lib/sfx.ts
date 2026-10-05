@@ -90,6 +90,9 @@ export function noise(start: number, dur: number, peak: number, from: number, to
   src.stop(start + dur);
 }
 
+/** For feature kits (sfx-<feature>.ts): runs f on the shared graph with the same mute and unlock rules as play(). */
+export function voice(f: (t: number, kit: { tone: typeof tone; noise: typeof noise }) => void, ambient = false) { if (isMuted() || (ambient && !unlocked)) return; if (!ambient) unlockAudio(); if (ctx && master) try { f(ctx.currentTime + 0.005, { tone, noise }); } catch {} }
+
 // C major pentatonic, two octaves up: hovers always land on a pleasant note.
 const PENTA = [1046.5, 1174.7, 1318.5, 1568, 1760, 2093];
 
