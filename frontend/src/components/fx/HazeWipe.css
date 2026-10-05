@@ -1,0 +1,46 @@
+/* Hero street band: the SVG street, the haze canvas over it and the road chip. Only the canvas
+   takes pointer events, and it leaves vertical swipes to the page (touch-action: pan-y). */
+.street { position: relative; }
+.street-scene { position: relative; height: 170px; overflow: hidden; pointer-events: none; transition: opacity 400ms; }
+@media (min-width: 640px) { .street-scene { height: 200px; } }
+@media (min-width: 1024px) { .street-scene { height: max(190px, min(16vw, 26vh, 300px)); } }
+.street-scene > .hz { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Until the haze island takes over, a motion visitor sees nothing rather than a clean street that
+   then fogs up. Reduced motion (no html.motion) shows the finished street straight away. */
+html.motion .street[data-state="still"] :is(.street-scene, .street-ui) { opacity: 0; }
+
+.street-haze { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: auto; touch-action: pan-y; }
+.street[data-state="still"] .street-haze, .street[data-state="clear"] .street-haze { pointer-events: none; }
+
+/* Phones: the chip sits just under the road, so it never covers the bus. Wider: on the road. */
+.street-ui { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 16px 0; transition: opacity 400ms; }
+@media (min-width: 640px) { .street-ui { position: absolute; left: 24px; right: 24px; bottom: 5px; padding: 0; flex-wrap: wrap-reverse; } }
+@media (min-width: 1024px) { .street-ui { left: 28px; right: 28px; } }
+
+.street-chip {
+  position: relative; display: inline-grid; overflow: hidden; max-width: 100%; padding: 4px 12px; border-radius: 14px;
+  background: var(--surface); color: var(--text-display); border: 1px solid var(--border);
+  font-size: 11px; font-weight: 600; line-height: 1.35; box-shadow: 0 10px 24px -14px rgb(0 0 0 / 0.55);
+}
+.street-chip b { font-weight: 800; }
+.street-chip em { font-style: normal; color: var(--text-secondary); }
+.street-chip-row { display: none; }
+.street-chip-row.is-on { display: block; }
+@media (min-width: 640px) { .street-chip { font-size: 12px; padding: 5px 14px; border-radius: 999px; white-space: nowrap; } }
+@media (prefers-reduced-motion: no-preference) {
+  .street-chip-row.is-on { animation: street-roll 520ms cubic-bezier(.2,.9,.2,1) both; }
+}
+@keyframes street-roll { from { transform: translateY(110%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.street-reset {
+  pointer-events: auto; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; color: var(--text-display);
+  background: color-mix(in srgb, var(--surface) 78%, transparent); border: 1px solid var(--border-visible); cursor: pointer;
+  transition: background-color 200ms;
+}
+.street-reset:hover { background: var(--surface); }
+/* Phones: up in the sky at the top left, so the copy below does not jump when it appears. */
+@media (max-width: 639px) { .street-reset { position: absolute; left: 12px; top: 10px; } }
+@media (prefers-reduced-motion: no-preference) { .street-reset { animation: street-roll 520ms cubic-bezier(.2,.9,.2,1) 300ms both; } }
+
+/* Over the haze the cursor ring swells into a soft 140 px breeze. */
+.cursor-ring.breeze:not(.hot)::before { transform: scale(3.9); border-color: rgb(125 198 47 / 0.55); background: rgb(200 239 165 / 0.12); }

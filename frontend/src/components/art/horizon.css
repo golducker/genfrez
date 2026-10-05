@@ -1,0 +1,79 @@
+/* Hanoi street palette. Day is the brand pastels with 2px navy outlines; night (dark theme and
+   navy panels) lights a share of the windows, swaps the sun for a moon and turns on the stars and
+   the bus's headlight. Only fills change, so the theme wipe recolours the street in one sweep. */
+.hz {
+  --hz-far: #d5e8ef; --hz-far-win: #bcd7e3; --hz-far-2: #b5d4e3;
+  --hz-sun: #f26a1b; --hz-crater: transparent; --hz-stars-o: 0;
+  --hz-house-1: #e7f2d3; --hz-house-2: #fbe1cc; --hz-house-3: #dcedf6; --hz-house-4: #fbf6e0; --hz-house-5: #f6dca8;
+  --hz-ink: #13345e; --hz-win-a: #a9def2; --hz-win-b: #a9def2; --hz-shutter: #2f4a6e;
+  --hz-sign-1: #f26a1b; --hz-sign-2: #7dc62f; --hz-sign-3: #13345e;
+  --hz-tree: #5aae3a; --hz-tree-2: #7dc62f; --hz-wire: #13345e;
+  --hz-water: #a9def2; --hz-bridge: #d9601f;
+  --hz-kerb: #e6dfcc; --hz-road: #13345e; --hz-lane: #fbf6e0;
+  --hz-moto: #2f4a6e; --hz-puff: #b3a998;
+  --hz-bus: #7dc62f; --hz-bus-win: #d4f0fb; --hz-hub: #fbf6e0; --hz-lamp: #ffd27a; --hz-cone-o: 0;
+  --hz-haze: #8a7f70;
+}
+:root[data-theme="dark"] .hz,
+.tone-navy .hz {
+  --hz-far: #153a63; --hz-far-win: rgb(255 210 122 / 0.45); --hz-far-2: #1c4878;
+  --hz-sun: #fbf6e0; --hz-crater: #e2dbbd; --hz-stars-o: 0.85;
+  --hz-house-1: #1d4d84; --hz-house-2: #1a4272; --hz-house-3: #22528b; --hz-house-4: #183c68; --hz-house-5: #265890;
+  --hz-ink: #081a30; --hz-win-a: #ffd27a; --hz-win-b: #0d2440; --hz-shutter: #0a1e38;
+  --hz-sign-1: #ff7a2e; --hz-sign-2: #7dc62f; --hz-sign-3: #7fc2f0;
+  --hz-tree: #1f5a3c; --hz-tree-2: #2e7a4d; --hz-wire: #4b6a91;
+  --hz-water: #0f3558; --hz-bridge: #c4521a;
+  --hz-kerb: #1a3a60; --hz-road: #061528; --hz-lane: #4b6a91;
+  --hz-moto: #33557f; --hz-puff: #4d5868;
+  --hz-bus: #6fbf2a; --hz-bus-win: #ffd27a; --hz-hub: #9aabc2; --hz-lamp: #fff1c4; --hz-cone-o: 0.2;
+  --hz-haze: #6b6459;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hz {
+    --hz-far: #153a63; --hz-far-win: rgb(255 210 122 / 0.45); --hz-far-2: #1c4878;
+    --hz-sun: #fbf6e0; --hz-crater: #e2dbbd; --hz-stars-o: 0.85;
+    --hz-house-1: #1d4d84; --hz-house-2: #1a4272; --hz-house-3: #22528b; --hz-house-4: #183c68; --hz-house-5: #265890;
+    --hz-ink: #081a30; --hz-win-a: #ffd27a; --hz-win-b: #0d2440; --hz-shutter: #0a1e38;
+    --hz-sign-1: #ff7a2e; --hz-sign-2: #7dc62f; --hz-sign-3: #7fc2f0;
+    --hz-tree: #1f5a3c; --hz-tree-2: #2e7a4d; --hz-wire: #4b6a91;
+    --hz-water: #0f3558; --hz-bridge: #c4521a;
+    --hz-kerb: #1a3a60; --hz-road: #061528; --hz-lane: #4b6a91;
+    --hz-moto: #33557f; --hz-puff: #4d5868;
+    --hz-bus: #6fbf2a; --hz-bus-win: #ffd27a; --hz-hub: #9aabc2; --hz-lamp: #fff1c4; --hz-cone-o: 0.2;
+    --hz-haze: #6b6459;
+  }
+}
+
+.hz { display: block; overflow: hidden; }
+.hz-stars { fill: #fbf6e0; opacity: var(--hz-stars-o); }
+.hz-sun { fill: var(--hz-sun); }
+.hz-crater { fill: var(--hz-crater); }
+.hz-far { fill: var(--hz-far); }
+.hz-far-win { fill: var(--hz-far-win); }
+.hz-far-2 { fill: var(--hz-far-2); }
+.hz-water { fill: var(--hz-water); }
+.hz-bridge { fill: var(--hz-bridge); }
+.hz-bridge-line { fill: none; stroke: var(--hz-bridge); stroke-linejoin: round; }
+.hz-shutter { fill: var(--hz-shutter); }
+.hz-win-a { fill: var(--hz-win-a); }
+.hz-win-b { fill: var(--hz-win-b); }
+.hz-outline { fill: none; stroke: var(--hz-ink); stroke-width: 2; stroke-linejoin: round; }
+.hz-ink { fill: var(--hz-ink); }
+.hz-ink-line { fill: none; stroke: var(--hz-ink); stroke-width: 1.5; }
+.hz-wire { fill: none; stroke: var(--hz-wire); stroke-width: 1.1; opacity: 0.6; }
+.hz-tree { fill: var(--hz-tree); }
+.hz-tree-2 { fill: var(--hz-tree-2); }
+.hz-kerb { fill: var(--hz-kerb); }
+.hz-road { fill: var(--hz-road); }
+.hz-lane { fill: var(--hz-lane); opacity: 0.75; }
+.hz-moto { fill: var(--hz-moto); }
+.hz-puff { fill: var(--hz-puff); opacity: 0.7; }
+.hz-cone { fill: #ffd27a; opacity: var(--hz-cone-o); }
+.hz-shadow { fill: rgb(0 0 0 / 0.18); }
+.hz-bus-body { fill: var(--hz-bus); stroke: var(--hz-ink); stroke-width: 2.5; }
+.hz-bus-win { fill: var(--hz-bus-win); stroke: var(--hz-ink); stroke-width: 1.6; }
+.hz-sign { fill: var(--hz-ink); }
+.hz-route { fill: #c8efa5; font-size: 6.4px; font-weight: 800; }
+.hz-bus-text { fill: var(--hz-ink); font-size: 10px; font-weight: 800; letter-spacing: 0.08em; }
+.hz-hub { fill: var(--hz-hub); }
+.hz-lamp { fill: var(--hz-lamp); }

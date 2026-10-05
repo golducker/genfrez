@@ -50,6 +50,9 @@ export function unlockAudio() {
   } catch {}
 }
 
+/** The live audio graph, or null while audio is locked or muted. For cues built in other files. */
+export const audioOut = () => (unlocked && !isMuted() && ctx && master ? { ctx, master } : null);
+
 function tone(freq: number, start: number, dur: number, peak: number, type: OscillatorType = "sine", glideTo?: number) {
   const c = ctx!;
   const o = c.createOscillator();

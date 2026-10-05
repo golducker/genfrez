@@ -8,6 +8,8 @@ import PointsCardPlay from "@/components/PointsCardPlay";
 import Icon from "@/components/Icon";
 import Split from "@/components/fx/Split";
 import Leaves from "@/components/fx/Leaves";
+import HazeWipe from "@/components/fx/HazeWipe";
+import Horizon from "@/components/art/Horizon";
 import Marquee from "@/components/fx/Marquee";
 import { site } from "@/lib/site";
 import { appNum, tripPoints } from "@/lib/points";
@@ -33,17 +35,19 @@ export default function HomeSection() {
         <div aria-hidden="true" className="blob bg-[var(--sky)] w-[440px] h-[440px] top-72 -left-48" />
         <div aria-hidden="true" className="blob bg-[#ffd9bf] w-[300px] h-[300px] bottom-0 right-[30%] !opacity-40" />
         <Leaves count={20} />
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-14 sm:pt-20 pb-20 sm:pb-28 grid gap-14 lg:grid-cols-[1.25fr_1fr] items-center">
-          <div data-hero-out>
+        {/* Phones: wordmark, street, copy, card. Desktop: copy left, card right, the street full-bleed
+            along the bottom of the first screen. Short laptop screens tighten up so the street fits. */}
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-10 sm:pt-20 pb-20 sm:pb-28 lg:pb-0 [@media(min-width:1024px)_and_(max-height:820px)]:pt-8 grid gap-x-14 lg:grid-cols-[1.25fr_1fr] items-center">
+          <div data-hero-out className="lg:col-start-1 lg:row-start-1">
             <p className="t-label enter" style={d(0)}>
               {site.event} · {site.city}
             </p>
 
-            <div className="mt-8 flex items-center gap-4 sm:gap-6">
+            <div className="mt-6 sm:mt-8 [@media(min-width:1024px)_and_(max-height:820px)]:mt-4 flex items-center gap-4 sm:gap-6">
               <span className="enter-pop shrink-0 hidden sm:block" style={d(0.05)}>
                 <Logo size={104} label className="block nav-logo-mark" />
               </span>
-              <h1 className="t-display text-[64px] sm:text-[104px] lg:text-[120px]" aria-label={site.name}>
+              <h1 className="t-display text-[64px] sm:text-[104px] lg:text-[120px] [@media(min-width:1024px)_and_(max-height:820px)]:text-[104px]" aria-label={site.name}>
                 <span className="hero-word" aria-hidden="true">
                   {"GenFre".split("").map((c, i) => (
                     <span key={i} style={{ "--i": i } as React.CSSProperties}>
@@ -54,19 +58,25 @@ export default function HomeSection() {
                 </span>
               </h1>
             </div>
+          </div>
 
-            <p className="enter mt-6 text-[24px] sm:text-[32px] font-extrabold tracking-[-0.02em] text-text-display leading-tight" style={d(0.45)}>
+          <HazeWipe className="mt-5 sm:mt-6 -mx-4 sm:-mx-6 lg:mt-3 lg:mr-0 lg:ml-[calc(50%-50vw)] lg:w-screen lg:col-span-2 lg:row-start-3">
+            <Horizon />
+          </HazeWipe>
+
+          <div data-hero-out="wide" className="mt-5 sm:mt-6 [@media(min-width:1024px)_and_(max-height:820px)]:mt-4 lg:col-start-1 lg:row-start-2">
+            <p className="enter text-[24px] sm:text-[32px] font-extrabold tracking-[-0.02em] text-text-display leading-tight" style={d(0.45)}>
               Turn <span className="text-[var(--success)]">Green</span> into <span className="text-accent-text">Gains</span>
             </p>
             <p className="t-label mt-3 enter" style={d(0.55)}>
               Your green reward platform · {site.subTagline}
             </p>
 
-            <p className="enter mt-8 max-w-xl text-[18px] sm:text-[20px] leading-relaxed text-text-primary" style={d(0.65)}>
+            <p className="enter mt-5 sm:mt-8 [@media(min-width:1024px)_and_(max-height:820px)]:mt-5 max-w-xl text-[18px] sm:text-[20px] leading-relaxed text-text-primary" style={d(0.65)}>
               {site.mission}
             </p>
 
-            <div className="enter mt-10 flex flex-wrap items-center gap-3" style={d(0.8)}>
+            <div className="enter mt-6 sm:mt-10 [@media(min-width:1024px)_and_(max-height:820px)]:mt-6 flex flex-wrap items-center gap-3" style={d(0.8)}>
               <Link href="/#solution" className="btn btn-primary btn-lg">
                 <span>Explore our solution ↗</span>
               </Link>
@@ -74,46 +84,47 @@ export default function HomeSection() {
                 <span>See the live demo ↓</span>
               </Link>
             </div>
-
-            <a href="#about" className="scroll-cue enter mt-14 hidden lg:inline-flex" style={d(1.1)}>
-              <i aria-hidden="true" />
-              Scroll to explore
-            </a>
           </div>
 
-          {/* Product moment, lifted from the Mini App home screen. Hold the button to ride to Gold. */}
-          <PointsCardPlay>
-            <span className="enter-pop absolute -top-2 right-2 z-10" style={d(0.9)} aria-hidden="true">
-              <Mascot name="star-cool" scale={0.9} className="bob [--r:8deg]" />
-            </span>
+          {/* On desktop the card floats over the top of the street without pushing it down; only the
+              card and its mascots take the pointer there, the rest goes to the haze. */}
+          <div className="relative z-[2] mt-14 lg:mt-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-stretch lg:pointer-events-none lg:[&_.gold-play>*]:pointer-events-auto">
+            <div className="lg:absolute lg:inset-x-0 lg:top-3">
+              {/* Product moment, lifted from the Mini App home screen. Hold the button to ride to Gold. */}
+              <PointsCardPlay>
+                <span className="enter-pop absolute -top-2 right-2 z-10" style={d(0.9)} aria-hidden="true">
+                  <Mascot name="star-cool" scale={0.9} className="bob [--r:8deg]" />
+                </span>
 
-            {/* Points landing in real time: three notifications take turns in the same spot */}
-            <span className="chip-float chip-first right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "2.2s" } as React.CSSProperties} aria-hidden="true">
-              <i>
-                <Icon name="bus" size={15} />
-              </i>
-              Bus 08 · 5 km <b>+{appNum(tripPoints(5, "bus"), 1)}</b>
-            </span>
-            <span className="chip-float right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "4.7s" } as React.CSSProperties} aria-hidden="true">
-              <i>
-                <Icon name="bike" size={15} />
-              </i>
-              TNGo e-bike · 3 km <b>+{appNum(tripPoints(3, "ebike"), 1)}</b>
-            </span>
-            <span className="chip-float right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "7.2s" } as React.CSSProperties} aria-hidden="true">
-              <i>
-                <Icon name="leaf" size={15} />
-              </i>
-              Walk · 2 km <b>+{appNum(tripPoints(2, "walk"), 1)}</b>
-            </span>
+                {/* Points landing in real time: three notifications take turns in the same spot */}
+                <span className="chip-float chip-first right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "2.2s" } as React.CSSProperties} aria-hidden="true">
+                  <i>
+                    <Icon name="bus" size={15} />
+                  </i>
+                  Bus 08 · 5 km <b>+{appNum(tripPoints(5, "bus"), 1)}</b>
+                </span>
+                <span className="chip-float right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "4.7s" } as React.CSSProperties} aria-hidden="true">
+                  <i>
+                    <Icon name="bike" size={15} />
+                  </i>
+                  TNGo e-bike · 3 km <b>+{appNum(tripPoints(3, "ebike"), 1)}</b>
+                </span>
+                <span className="chip-float right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "7.2s" } as React.CSSProperties} aria-hidden="true">
+                  <i>
+                    <Icon name="leaf" size={15} />
+                  </i>
+                  Walk · 2 km <b>+{appNum(tripPoints(2, "walk"), 1)}</b>
+                </span>
 
-            {/* Steps aside on phones once Gold is reached, so the caption has room */}
-            <span className="gold-shy absolute bottom-2 -left-4 sm:-left-16" aria-hidden="true">
-              <span className="enter-pop block" style={d(1.05)}>
-                <Mascot name="green-kiss" scale={0.95} className="bob-slow [--r:-6deg]" />
-              </span>
-            </span>
-          </PointsCardPlay>
+                {/* Steps aside on phones once Gold is reached, so the caption has room */}
+                <span className="gold-shy absolute bottom-2 -left-4 sm:-left-16" aria-hidden="true">
+                  <span className="enter-pop block" style={d(1.05)}>
+                    <Mascot name="green-kiss" scale={0.95} className="bob-slow [--r:-6deg]" />
+                  </span>
+                </span>
+              </PointsCardPlay>
+            </div>
+          </div>
         </div>
       </section>
 

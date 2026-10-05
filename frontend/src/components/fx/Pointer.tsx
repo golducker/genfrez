@@ -73,6 +73,9 @@ export default function Pointer() {
         if (hot && (hot.matches("a, button") || hot.classList.contains("mascot-hit"))) play("hover");
       }
 
+      // Over the hero street's haze the ring swells into a breeze (see HazeWipe).
+      r.classList.toggle("breeze", !!t.closest?.("[data-cursor-mode='breeze']"));
+
       if (still) return;
 
       // Magnetic buttons
