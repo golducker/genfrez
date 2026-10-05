@@ -1,0 +1,43 @@
+/*
+ * The footer wordmark turned to glass for the leaf jar (LeafJar.tsx). Classes are added by the
+ * island, so without JavaScript the solid wordmark stays as it was.
+ */
+.footer-mega.jar { position: relative; }
+.jar-canvas { position: absolute; left: 0; top: 0; width: calc(100% + 0.12em); height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.6s ease; }
+.footer-mega.jar-show .jar-canvas { opacity: 1; }
+
+/* The canvas runs a little past the box: the tight letter-spacing lets the Z's ink overhang it. */
+
+/* Glass: a faint fill here; the canvas draws the rim, so the leaves read as being inside the letters. */
+.footer-mega.jar-show .split-w { overflow: visible; }
+.footer-mega.jar-show .split-i {
+  color: color-mix(in srgb, var(--text-display) 12%, transparent);
+  transition: color 0.8s ease;
+}
+.footer-mega.jar-show .z .split-i {
+  color: color-mix(in srgb, var(--orange) 12%, transparent);
+}
+
+/* Full: the Z strikes like a neon shop sign, two stutters and then steady. */
+.footer-mega.jar-full .z .split-i {
+  color: color-mix(in srgb, var(--orange) 46%, transparent);
+  text-shadow: 0 0 0.03em #ffb37a, 0 0 0.12em rgb(255 122 46 / 0.75), 0 0 0.32em rgb(255 122 46 / 0.4);
+  animation: jar-neon 1.1s steps(1, end) both;
+}
+@keyframes jar-neon {
+  0% { opacity: 0.3; }
+  6% { opacity: 1; }
+  11% { opacity: 0.25; }
+  17% { opacity: 1; }
+  32% { opacity: 0.4; }
+  38%, 100% { opacity: 1; }
+}
+
+.jar-num { font-variant-numeric: tabular-nums; }
+.jar-dot { width: 8px; height: 8px; border-radius: 99px; background: var(--success); box-shadow: 0 0 0 0 rgb(155 219 106 / 0.6); animation: jar-pulse 2s ease-out infinite; }
+@keyframes jar-pulse { 70% { box-shadow: 0 0 0 7px rgb(155 219 106 / 0); } 100% { box-shadow: 0 0 0 0 rgb(155 219 106 / 0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .jar-canvas, .footer-mega.jar-show .split-i { transition: none; }
+  .footer-mega.jar-full .z .split-i, .jar-dot { animation: none; }
+}

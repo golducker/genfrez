@@ -53,7 +53,7 @@ export function unlockAudio() {
 /** The live audio graph, or null while audio is locked or muted. For cues built in other files. */
 export const audioOut = () => (unlocked && !isMuted() && ctx && master ? { ctx, master } : null);
 
-function tone(freq: number, start: number, dur: number, peak: number, type: OscillatorType = "sine", glideTo?: number) {
+export function tone(freq: number, start: number, dur: number, peak: number, type: OscillatorType = "sine", glideTo?: number) {
   const c = ctx!;
   const o = c.createOscillator();
   const g = c.createGain();
@@ -68,7 +68,7 @@ function tone(freq: number, start: number, dur: number, peak: number, type: Osci
   o.stop(start + dur + 0.02);
 }
 
-function noise(start: number, dur: number, peak: number, from: number, to: number, q = 1.2) {
+export function noise(start: number, dur: number, peak: number, from: number, to: number, q = 1.2) {
   const c = ctx!;
   const len = Math.ceil(c.sampleRate * dur);
   const buf = c.createBuffer(1, len, c.sampleRate);

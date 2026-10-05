@@ -4,6 +4,8 @@ import ThemeToggle from "./ThemeToggle";
 import SoundToggle from "./SoundToggle";
 import Icon from "./Icon";
 import Leaves from "./fx/Leaves";
+import LeafJar from "./fx/LeafJar";
+import JarCounter from "./fx/JarCounter";
 import { site } from "@/lib/site";
 
 export default function Footer() {
@@ -46,7 +48,19 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 flex items-end justify-between gap-6">
+      {/* The leaf jar: a live Year-1 projection, and the wordmark below fills with it. */}
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="grid gap-4 border-t border-border pt-8 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-end sm:gap-14">
+          <JarCounter />
+          <p className="t-caption max-w-[60ch] sm:justify-self-end">
+            Each leaf in the letters below is 25 g of CO₂. The count assumes 12,000 riders in Year 1, each swapping one 5 km
+            motorbike trip a day for an e-bike and saving 65 g per km. That makes 3.9 t a day, about 45 g a second. The orange
+            leaves in the Z are the haze you cleared in the street at the top.
+          </p>
+        </div>
+      </div>
+
+      <div className="relative mx-auto mt-6 sm:mt-4 max-w-6xl px-4 sm:px-6 flex items-end justify-between gap-6">
         <p data-split className="footer-mega select-none" aria-hidden="true">
           {"GenFre".split("").map((c, i) => (
             <span key={i} className="split-w">
@@ -56,6 +70,7 @@ export default function Footer() {
           <span className="split-w z">
             <span className="split-i">Z</span>
           </span>
+          <LeafJar />
         </p>
         <Link href="/#home" data-magnetic className="mb-10 shrink-0 hidden sm:grid place-items-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[var(--orange)] text-[#0d2440] shadow-[0_16px_30px_-12px_rgb(242_106_27/0.8)] transition-[translate] duration-500" aria-label="Back to top">
           <Icon name="arrowUp" size={24} stroke={2.6} />

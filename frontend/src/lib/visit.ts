@@ -36,3 +36,40 @@ export function subscribeCleared(cb: () => void) {
     subs.delete(cb);
   };
 }
+
+/*
+ * The Year-1 projection clock behind the footer jar: 12,000 riders each take one 5 km e-bike trip a
+ * day instead of a petrol motorbike, saving 95 − 30 = 65 g per km. That is 3.9 t a day, about 45 g a
+ * second. The clock only runs while the tab is visible, so a page left in the background adds nothing.
+ */
+export const YEAR1 = { riders: 12000, km: 5, savedPerKm: 65 };
+export const PROJ_G_PER_DAY = YEAR1.riders * YEAR1.km * YEAR1.savedPerKm;
+export const PROJ_G_PER_S = PROJ_G_PER_DAY / 86400;
+
+let ranMs = 0;
+let since: number | null = null;
+let started = false;
+
+function clockStart() {
+  if (started || typeof document === "undefined") return;
+  started = true;
+  if (!document.hidden) since = performance.now();
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && since !== null) {
+      ranMs += performance.now() - since;
+      since = null;
+    } else if (!document.hidden && since === null) since = performance.now();
+  });
+}
+clockStart();
+
+/** Grams the Year-1 riders would have avoided while this page was open and visible. */
+export function projectedG() {
+  clockStart();
+  return ((ranMs + (since === null ? 0 : performance.now() - since)) / 1000) * PROJ_G_PER_S;
+}
+
+/** Grams at which the footer jar is full (0 until the jar has measured itself). */
+let jarFullG = 0;
+export const getJarFullG = () => jarFullG;
+export const setJarFullG = (g: number) => void (jarFullG = g);
