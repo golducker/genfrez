@@ -1,48 +1,18 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect } from "react";
+import { play, unlockAudio } from "@/lib/sfx";
+import { reducedMotion } from "@/lib/motion";
 
-/* Click feedback for every link and button: a short synthesized "pop" (Web Audio, no asset files)
-   plus a ripple on .btn. Sound can be muted; the choice is kept in localStorage.
-   The ripple starts on pointerdown so it feels instant; the sound waits for click, because Safari and
-   mobile browsers only unlock audio on a click/tap, not on pointerdown.
-   Also runs the scroll-reveal fallback for browsers without CSS scroll-driven animations. */
+/* Click feedback for the whole page:
+   - every link and button gets a synthesized sound (see lib/sfx)
+   - .btn gets an ink ripple from the press point
+   - primary buttons and pills throw a small burst of leaves and confetti
+   - mascots squash, stretch and boing when poked
+   The ripple starts on pointerdown so it feels instant; sound waits for click, because Safari and
+   mobile browsers only unlock audio on a click/tap, not on pointerdown. */
 
-let ctx: AudioContext | null = null;
-const listeners = new Set<() => void>();
-
-function readMuted(): boolean {
-  try {
-    return localStorage.getItem("sound") === "off";
-  } catch {
-    return false;
-  }
-}
-function subscribe(cb: () => void) {
-  listeners.add(cb);
-  return () => listeners.delete(cb);
-}
-
-function pop(kind: "tap" | "nav" | "cta") {
-  if (readMuted()) return;
-  try {
-    ctx ??= new AudioContext();
-    if (ctx.state === "suspended") void ctx.resume();
-    const t = ctx.currentTime;
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    const base = kind === "cta" ? 440 : kind === "nav" ? 560 : 680;
-    o.type = "sine";
-    o.frequency.setValueAtTime(base, t);
-    o.frequency.exponentialRampToValueAtTime(base * 1.9, t + 0.07);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(kind === "cta" ? 0.22 : 0.14, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
-    o.connect(g).connect(ctx.destination);
-    o.start(t);
-    o.stop(t + 0.18);
-  } catch {}
-}
+const COLORS = ["#7dc62f", "#c8efa5", "#f26a1b", "#a9def2", "#ffd45a", "#5aae3a"];
 
 function ripple(el: HTMLElement, e: PointerEvent) {
   const r = el.getBoundingClientRect();
@@ -56,69 +26,87 @@ function ripple(el: HTMLElement, e: PointerEvent) {
   s.addEventListener("animationend", () => s.remove());
 }
 
+/** Leaves and dots that spray out of (x, y) and fall with a little gravity. */
+export function burst(x: number, y: number, count = 14, spread = 1) {
+  if (reducedMotion()) return;
+  const layer = document.createElement("div");
+  layer.className = "burst";
+  layer.style.left = `${x}px`;
+  layer.style.top = `${y}px`;
+  document.body.appendChild(layer);
+  let left = count;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("i");
+    const leaf = i % 3 !== 0;
+    p.className = leaf ? "leaf" : "dot";
+    p.style.background = COLORS[i % COLORS.length];
+    const size = (leaf ? 9 : 6) + Math.random() * 6;
+    p.style.width = `${size}px`;
+    p.style.height = `${size}px`;
+    layer.appendChild(p);
+    const a = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+    const v = (60 + Math.random() * 90) * spread;
+    const dx = Math.cos(a) * v;
+    const dy = Math.sin(a) * v - 40 * spread;
+    const rot = (Math.random() - 0.5) * 540;
+    p.animate(
+      [
+        { transform: "translate(-50%, -50%) scale(0.2) rotate(0deg)", opacity: 1 },
+        { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot / 2}deg)`, opacity: 1, offset: 0.45 },
+        { transform: `translate(calc(-50% + ${dx * 1.25}px), calc(-50% + ${dy + 90 * spread}px)) scale(0.6) rotate(${rot}deg)`, opacity: 0 },
+      ],
+      { duration: 900 + Math.random() * 500, easing: "cubic-bezier(.15,.7,.3,1)", fill: "forwards" }
+    ).onfinish = () => {
+      if (--left === 0) layer.remove();
+    };
+  }
+}
+
 export default function ClickFx() {
   useEffect(() => {
     const target = (e: Event) => (e.target as Element | null)?.closest<HTMLElement>("a, button") ?? null;
+
     function onDown(e: PointerEvent) {
       if (e.button !== 0) return;
       const el = target(e);
       if (el?.classList.contains("btn")) ripple(el, e);
     }
+
     function onClick(e: MouseEvent) {
+      unlockAudio();
+      const t = e.target as Element | null;
+      const mascot = t?.closest<HTMLElement>(".mascot-hit");
+      if (mascot) {
+        play("boing");
+        const img = mascot.querySelector<HTMLElement>(".mascot-img") ?? mascot;
+        img.classList.remove("boing");
+        void img.offsetWidth; // restart the animation
+        img.classList.add("boing");
+        img.addEventListener("animationend", () => img.classList.remove("boing"), { once: true });
+        burst(e.clientX, e.clientY, 10, 0.7);
+        return;
+      }
       const el = target(e);
-      if (el) pop(el.classList.contains("btn-primary") ? "cta" : el.closest("header") ? "nav" : "tap");
+      if (!el) return;
+      // Components with their own sound (calculator, toggles) mark themselves data-sfx="own".
+      if (el.dataset.sfx === "own") return;
+      const primary = el.classList.contains("btn-primary");
+      play(primary ? "cta" : el.closest("header") ? "nav" : "tap");
+      if (primary || el.classList.contains("pill")) burst(e.clientX, e.clientY, primary ? 16 : 9, primary ? 1 : 0.6);
     }
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Enter" || e.key === " ") unlockAudio();
+    }
+
     document.addEventListener("pointerdown", onDown);
     document.addEventListener("click", onClick, true);
-
-    // Scroll reveal: CSS handles it where animation-timeline exists (Chromium); elsewhere use an observer.
-    let io: IntersectionObserver | undefined;
-    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!still && !CSS.supports("animation-timeline: view()")) {
-      io = new IntersectionObserver(
-        (entries) => entries.forEach((en) => {
-          if (!en.isIntersecting) return;
-          en.target.classList.add("in");
-          io!.unobserve(en.target);
-        }),
-        { threshold: 0.12, rootMargin: "0px 0px -5% 0px" }
-      );
-      document.querySelectorAll(".reveal").forEach((el) => {
-        el.classList.add("reveal-io");
-        io!.observe(el);
-      });
-    }
-
+    document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("pointerdown", onDown);
       document.removeEventListener("click", onClick, true);
-      io?.disconnect();
+      document.removeEventListener("keydown", onKey);
     };
   }, []);
   return null;
-}
-
-export function SoundToggle({ className = "inline-flex" }: { className?: string }) {
-  const muted = useSyncExternalStore(subscribe, readMuted, () => false);
-  function toggle() {
-    try {
-      localStorage.setItem("sound", muted ? "on" : "off");
-    } catch {}
-    listeners.forEach((l) => l());
-  }
-  return (
-    <button
-      type="button"
-      onClick={toggle}
-      aria-pressed={!muted}
-      aria-label={muted ? "Sound off. Turn click sounds on" : "Sound on. Turn click sounds off"}
-      className={`items-center gap-1.5 rounded-full border-2 border-border px-3 h-9 text-[13px] font-semibold text-text-secondary hover:text-text-display hover:border-border-visible transition-colors ${className}`}
-    >
-      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />
-        {muted ? <path d="M17 9l5 6M22 9l-5 6" /> : <path d="M17 8.5a5 5 0 0 1 0 7M19.5 6a8.5 8.5 0 0 1 0 12" />}
-      </svg>
-      {muted ? "Off" : "Sound"}
-    </button>
-  );
 }

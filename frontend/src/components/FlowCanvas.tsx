@@ -50,7 +50,9 @@ export default function FlowCanvas() {
       }
 
       const total = document.documentElement.scrollHeight - vh;
-      fill.current!.style.height = `${total > 0 ? (y / total) * 100 : 0}%`;
+      const prog = total > 0 ? y / total : 0;
+      fill.current!.style.height = `${prog * 100}%`;
+      document.documentElement.style.setProperty("--progress", prog.toFixed(4));
       stops.forEach((b, i) => b.classList.toggle("on", i <= cur));
       setFlowSection(parts[cur].dataset.flow as FlowId);
     }

@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSyncExternalStore } from "react";
+import { useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import Logo, { Wordmark } from "./Logo";
 import ThemeToggle from "./ThemeToggle";
-import { SoundToggle } from "./ClickFx";
+import SoundToggle from "./SoundToggle";
 import { getFlowSection, subscribeFlow, type FlowId } from "@/lib/flow";
 
 const links: { id: FlowId; label: string }[] = [
@@ -20,24 +20,41 @@ export default function Nav() {
   // The site is one continuous page; the active link follows the part on screen.
   const current = useSyncExternalStore(subscribeFlow, getFlowSection, () => "home" as FlowId);
   const onHome = path === "/";
+  const navRef = useRef<HTMLElement>(null);
+  const [pill, setPill] = useState<{ x: number; w: number } | null>(null);
+
+  // The dark pill slides between links instead of jumping.
+  useLayoutEffect(() => {
+    const place = () => {
+      const a = navRef.current?.querySelector<HTMLElement>(`[data-id="${current}"]`);
+      setPill(a && onHome ? { x: a.offsetLeft, w: a.offsetWidth } : null);
+    };
+    place();
+    addEventListener("resize", place);
+    document.fonts?.ready.then(place).catch(() => {});
+    return () => removeEventListener("resize", place);
+  }, [current, onHome]);
+
   return (
-    <header className="sticky top-0 z-20 px-3 sm:px-6 pt-3">
-      <div className="mx-auto max-w-6xl h-16 pl-2 pr-2 sm:pl-3 sm:pr-3 flex items-center justify-between gap-3 rounded-full bg-surface/90 backdrop-blur-md shadow-[0_12px_32px_-20px_rgb(var(--shadow)/0.45)] border border-border">
-        <Link href="/#home" className="flex items-center gap-2.5 text-text-display shrink-0" aria-label="GenFreZ home">
-          <Logo size={40} />
+    <header className="sticky top-0 z-30 px-3 sm:px-6 pt-3">
+      <div className="nav-shell mx-auto max-w-6xl h-16 pl-2 pr-2 sm:pl-3 sm:pr-3 flex items-center justify-between gap-3 rounded-full">
+        <Link href="/#home" className="nav-logo flex items-center gap-2.5 text-text-display shrink-0" aria-label="GenFreZ home">
+          <Logo size={40} className="block nav-logo-mark" />
           <Wordmark className="hidden sm:inline text-[20px]" />
         </Link>
-        <nav aria-label="Primary" className="flex items-center gap-0.5 sm:gap-1">
+        <nav ref={navRef} aria-label="Primary" className="relative flex items-center gap-0.5 sm:gap-1">
+          {pill && <span aria-hidden="true" className="nav-pill" style={{ transform: `translateX(${pill.x}px)`, width: pill.w }} />}
           {links.map((l) => {
             const active = onHome && current === l.id;
             return (
               <Link
                 key={l.id}
+                data-id={l.id}
                 href={`/#${l.id}`}
                 aria-current={active ? "location" : undefined}
-                className={`rounded-full px-2 sm:px-4 h-9 sm:h-10 inline-flex items-center text-[12.5px] sm:text-[14px] font-semibold whitespace-nowrap transition-colors duration-300 ${
-                  active ? "bg-text-display text-black" : "text-text-secondary hover:text-text-display hover:bg-surface-raised"
-                }`}
+                className={`relative z-[1] rounded-full px-2 sm:px-4 h-9 sm:h-10 inline-flex items-center text-[12.5px] sm:text-[14px] font-semibold whitespace-nowrap transition-colors duration-300 ${
+                  active ? "text-black" : "text-text-secondary hover:text-text-display"
+                } ${active && !pill ? "bg-text-display" : ""}`}
               >
                 {l.label}
               </Link>
@@ -46,6 +63,7 @@ export default function Nav() {
           <ThemeToggle className="hidden md:inline-flex ml-2" />
           <SoundToggle className="hidden md:inline-flex ml-1" />
         </nav>
+        <span className="nav-progress" aria-hidden="true" />
       </div>
     </header>
   );

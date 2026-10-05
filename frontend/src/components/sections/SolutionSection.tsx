@@ -3,8 +3,11 @@ import path from "node:path";
 import Link from "next/link";
 import Mascot from "@/components/Mascot";
 import type { MascotName } from "@/lib/mascots";
-import PhoneFrame from "@/components/PhoneFrame";
+import DemoStage, { type DemoScreen } from "@/components/DemoStage";
+import DemoVideo from "@/components/DemoVideo";
+import RouteSteps from "@/components/RouteSteps";
 import PointsCalc from "@/components/PointsCalc";
+import Split from "@/components/fx/Split";
 import SegBar from "@/components/SegBar";
 import Stat from "@/components/Stat";
 import { site } from "@/lib/site";
@@ -14,12 +17,18 @@ function Section({ id, label, title, mascot, children }: { id: string; label: st
   return (
     <section id={id} className="scroll-mt-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
-        <div className="reveal flex items-end justify-between gap-6">
+        <div className="flex items-end justify-between gap-6">
           <div>
-            <p className="t-label text-accent-text">{label}</p>
-            <h3 className="t-display text-[34px] sm:text-[52px] mt-4 max-w-3xl">{title}</h3>
+            <p data-reveal className="t-label label-rule text-accent-text">{label}</p>
+            <h3 data-split className="t-display text-[34px] sm:text-[56px] mt-4 max-w-3xl">
+              <Split text={title} />
+            </h3>
           </div>
-          {mascot && <Mascot name={mascot} scale={1.1} className="bob hidden md:block shrink-0" />}
+          {mascot && (
+            <div data-reveal="pop" className="hidden md:block shrink-0">
+              <Mascot name={mascot} scale={1.1} className="bob" />
+            </div>
+          )}
         </div>
         <div className="mt-12">{children}</div>
       </div>
@@ -27,9 +36,17 @@ function Section({ id, label, title, mascot, children }: { id: string; label: st
   );
 }
 
+const DEMO_SCREENS: DemoScreen[] = [
+  { title: "Home", body: "Points balance, distance to the next tier, today's top deals.", icon: "home" },
+  { title: "Missions", body: "Streak Rider, Green Steps, Crew Recruiter. Recorded automatically.", icon: "flame" },
+  { title: "Green Challenges", body: "No-Motorbike Week, Rainy Day Rider, Campus Carpool.", icon: "trophy" },
+  { title: "Vouchers", body: "Redeem via deep link to the partner. The platform never holds funds.", icon: "ticket" },
+  { title: "Scan", body: "Dynamic QR at bus stops and TNGo stations, cross-checked with GPS.", icon: "scan" },
+];
+
 function Card({ title, body }: { title: string; body: string }) {
   return (
-    <div className="reveal card card-lift p-7">
+    <div className="card card-lift p-7">
       <h4 className="text-[18px] font-bold text-text-display">{title}</h4>
       <p className="mt-2 text-[15px] text-text-secondary leading-relaxed">{body}</p>
     </div>
@@ -42,9 +59,11 @@ export default function SolutionSection() {
     <>
       <section className="relative">
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-16 sm:pt-24 pb-16">
-        <p className="t-label">Solution</p>
-        <h2 className="t-display text-[44px] sm:text-[80px] mt-4 max-w-4xl">A points engine where the currency is avoided CO₂.</h2>
-        <nav aria-label="On this page" className="mt-10 flex flex-wrap gap-2">
+        <p data-reveal className="t-label label-rule">Solution</p>
+        <h2 data-split className="t-display text-[44px] sm:text-[88px] mt-4 max-w-5xl">
+          <Split text="A points engine where the currency is" /> <Split text="avoided CO₂." className="text-[var(--success)]" />
+        </h2>
+        <nav aria-label="On this page" className="mt-10 flex flex-wrap gap-2" data-stagger>
           {[
             ["#problem", "Problem"],
             ["#how", "How it works"],
@@ -63,20 +82,20 @@ export default function SolutionSection() {
 
       {/* PROBLEM */}
       <Section id="problem" label="01 · The problem" mascot="fluffy-scared" title="Hanoi's greenest choices pay nothing. Its dirtiest one is the default.">
-        <p className="max-w-3xl text-[20px] sm:text-[24px] text-text-display leading-snug">
-          Every kilometre on a petrol motorbike in Hanoi traffic puts out 95 g of CO₂, and the largest, most incentive-responsive generation rides them every day. The bus, the e-bike, their own two feet: none of it pays anything back.
+        <p data-scrub className="max-w-4xl text-[24px] sm:text-[34px] font-bold tracking-[-0.02em] text-text-display leading-snug">
+          <Split text="Every kilometre on a petrol motorbike in Hanoi traffic puts out 95 g of CO₂, and the largest, most incentive-responsive generation rides them every day. The bus, the e-bike, their own two feet: none of it pays anything back." />
         </p>
         {/* TODO(Minh): add a source for the Gen Z share and the fuel-consumption range before publishing. */}
-        <div className="mt-12 grid gap-12 lg:grid-cols-3">
-          <Stat value="79.6" unit="M" label="Zalo monthly active users" note="The distribution channel is already on their phones." source="Zalo, Dec 2025" />
-          <Stat value="25" unit="%" label="Share of population born 1997–2012" note="Gen Z is the largest cohort, the primary motorbike-riding group, and the most incentive-responsive." />
-          <Stat value="95" unit="g CO₂/km" label="Petrol motorbike, congested urban" note="Real-world consumption runs 3.0 to 7.9 L/100 km in Hanoi stop-and-go traffic." />
+        <div className="mt-12 grid gap-12 lg:grid-cols-3" data-stagger>
+          <Stat value="79.6" countTo={79.6} decimals={1} unit="M" label="Zalo monthly active users" note="The distribution channel is already on their phones." source="Zalo, Dec 2025" />
+          <Stat value="25" countTo={25} unit="%" label="Share of population born 1997–2012" note="Gen Z is the largest cohort, the primary motorbike-riding group, and the most incentive-responsive." />
+          <Stat value="95" countTo={95} unit="g CO₂/km" label="Petrol motorbike, congested urban" note="Real-world consumption runs 3.0 to 7.9 L/100 km in Hanoi stop-and-go traffic." />
         </div>
 
         <div className="mt-16 grid gap-10 lg:grid-cols-2">
           <div>
             <p className="t-label mb-4">Two barriers keep young people on motorbikes</p>
-            <div className="grid gap-3">
+            <div className="grid gap-3" data-stagger>
               <div className="card p-6 grid grid-cols-[40px_1fr] gap-3">
                 <span className="t-data text-[20px] text-accent-text">01</span>
                 <div>
@@ -113,27 +132,21 @@ export default function SolutionSection() {
         </p>
 
         <div className="mt-12">
-          <p className="t-label mb-4">How it works · from trip to voucher</p>
-          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              ["01 · Move", "Take the bus, ride an e-bike, walk or carpool. Missions are recorded automatically inside the Zalo Mini App."],
-              ["02 · Verify", "The trip is checked against partner data, GPS and a rotating QR. The weaker the evidence, the lower its confidence coefficient."],
-              ["03 · Convert", "Avoided CO₂ is the distance times the gap between a petrol motorbike (95 g/km) and the mode you took."],
-              ["04 · Earn & redeem", "The scoring model prices it into points. 1 point = 25 g CO₂ = 100 ₫, redeemed through a deep link to the partner."],
-            ].map(([k, v]) => (
-              <li key={k} className="reveal card p-6">
-                <p className="text-[17px] font-extrabold text-text-display">{k}</p>
-                <p className="mt-2 text-[14px] text-text-secondary leading-relaxed">{v}</p>
-              </li>
-            ))}
-          </ol>
+          <RouteSteps />
         </div>
 
-        <div className="mt-12 tone-navy card p-6 sm:p-8 overflow-x-auto">
+        <div data-reveal="scale" className="aurora mt-16 tone-navy card p-6 sm:p-8">
+          <div aria-hidden="true" className="aurora-glow" />
           <p className="t-label mb-3">Scoring formula</p>
-          <p className="t-data text-[15px] sm:text-[20px] text-text-display whitespace-nowrap">
-            points = avoided CO₂ × <span className="text-text-secondary">1/25 g</span> × confidence × additionality × budget
-          </p>
+          <div className="overflow-x-auto" data-lenis-prevent>
+            <p className="t-data text-[15px] sm:text-[22px] text-text-display whitespace-nowrap" data-stagger>
+              {["points =", "avoided CO₂", "× 1/25 g", "× confidence", "× additionality", "× budget"].map((t, i) => (
+                <span key={t} className={`inline-block mr-2 ${i === 2 ? "text-text-secondary" : i === 0 ? "text-accent-text" : ""}`}>
+                  {t}
+                </span>
+              ))}
+            </p>
+          </div>
         </div>
 
         <div className="mt-12">
@@ -153,7 +166,7 @@ export default function SolutionSection() {
           </div>
           <div>
             <p className="t-label mb-4">Where AI is actually used</p>
-            <dl>
+            <dl data-stagger>
               {[
                 ["Emission factor conversion", "Rule-based lookup · must stay auditable"],
                 ["Green taxonomy classification", "Agentic AI extraction from partner evidence (FPT)"],
@@ -173,41 +186,17 @@ export default function SolutionSection() {
       </Section>
 
       {/* DEMO */}
-      <Section id="demo" mascot="blue-wave" label="03 · Demo" title="The Mini App, running now.">
-        <div className="grid gap-12 lg:grid-cols-[auto_1fr] items-start">
-          <PhoneFrame />
-          <div className="grid gap-8">
-            {hasVideoFile ? (
-              <div className="aspect-video rounded-[28px] overflow-hidden bg-black">
-                <video className="w-full h-full" controls preload="metadata" playsInline poster={`/${site.demoVideoPoster}`} title="GenFreZ demo video">
-                  <source src={`/${site.demoVideoFile}`} type="video/mp4" />
-                </video>
-              </div>
-            ) : site.demoVideoId ? (
-              <div className="aspect-video rounded-[28px] overflow-hidden">
-                <iframe className="w-full h-full" src={`https://www.youtube-nocookie.com/embed/${site.demoVideoId}`} title="GenFreZ demo video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen style={{ border: 0 }} />
-              </div>
-            ) : (
-              <div className="aspect-video rounded-[28px] bg-surface flex flex-col items-center justify-center gap-3">
-                <Mascot name="megaphone" scale={0.8} />
-                <p className="t-caption">Demo video coming soon</p>
-              </div>
-            )}
-            <div className="grid">
-              {[
-                ["Home", "Points balance, distance to the next tier, today's top deals."],
-                ["Missions", "Streak Rider, Green Steps, Crew Recruiter. Recorded automatically."],
-                ["Green Challenges", "No-Motorbike Week, Rainy Day Rider, Campus Carpool."],
-                ["Vouchers", "Redeem via deep link to the partner. The platform never holds funds."],
-                ["Scan", "Dynamic QR at bus stops and TNGo stations, cross-checked with GPS."],
-              ].map(([k, v]) => (
-                <div key={k} className="row grid-cols-[120px_1fr] py-3">
-                  <span className="t-label pt-0.5">{k}</span>
-                  <span className="text-[14px] text-text-secondary">{v}</span>
-                </div>
-              ))}
+      <Section id="demo" label="03 · Demo" title="The Mini App, running now. Tap it.">
+        <DemoStage screens={DEMO_SCREENS} />
+
+        <div className="mt-20 sm:mt-28">
+          {hasVideoFile ? (
+            <DemoVideo src={`/${site.demoVideoFile}`} poster={`/${site.demoVideoPoster}`} title="GenFreZ demo video" />
+          ) : site.demoVideoId ? (
+            <div data-reveal="scale" className="video-shell">
+              <iframe className="absolute inset-0 w-full h-full" src={`https://www.youtube-nocookie.com/embed/${site.demoVideoId}`} title="GenFreZ demo video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen style={{ border: 0 }} />
             </div>
-          </div>
+          ) : null}
         </div>
       </Section>
 
@@ -215,7 +204,7 @@ export default function SolutionSection() {
       <Section id="features" label="04 · Key features & benefits" title="Built for people who spend often, not big.">
         <div>
           <p className="t-label mb-4">Features · what the platform does</p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
             {[
               ["Nothing to install", "Runs inside Zalo. No new app, account or habit. Missions are recorded automatically."],
               ["Fixed, published rate", "1 point = 100 ₫ of voucher = 25 g CO₂ avoided. No badges, no abstract scores."],
@@ -229,7 +218,7 @@ export default function SolutionSection() {
         </div>
         <div className="mt-16">
           <p className="t-label mb-4">Benefits · what each side gets</p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2" data-stagger>
             {[
               ["Earn without spending", "Bus, walking, off-peak and ride-sharing missions issue points with no transaction. A user with no money still earns."],
               ["Community that works", "District leaderboards, weekly Green Challenges, Green Ambassadors, and users voting on which partners join next."],
@@ -244,29 +233,29 @@ export default function SolutionSection() {
 
       {/* ESG */}
       <Section id="esg" label="05 · ESG impact" title="Environmental, social, governance. Measured, not asserted.">
-        <div className="grid gap-4 lg:grid-cols-3">
-          <div className="reveal card p-7">
+        <div className="grid gap-4 lg:grid-cols-3" data-stagger>
+          <div className="card card-lift p-7">
             <p className="t-label">Environmental</p>
-            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2">325<span className="text-[14px] font-bold text-text-secondary">g CO₂</span></p>
+            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2"><span className="tabular-nums" data-count="325">325</span><span className="text-[14px] font-bold text-text-secondary">g CO₂</span></p>
             <p className="text-[14px] text-text-secondary mt-2">avoided per 5 km e-bike trip replacing a petrol motorbike. Marginal-emissions accounting means bus riders are rewarded for the trip they displaced, with the arithmetic shown.</p>
             <p className="text-[14px] text-text-secondary mt-3">Fewer motorbike kilometres in Hanoi means less PM2.5 and less peak-hour congestion, with off-peak bonuses learned per corridor.</p>
           </div>
-          <div className="reveal card p-7">
+          <div className="card card-lift p-7">
             <p className="t-label">Social</p>
             <p className="t-display text-[48px] mt-3 flex items-baseline gap-2">0<span className="text-[14px] font-bold text-text-secondary">₫ needed to earn</span></p>
             <p className="text-[14px] text-text-secondary mt-2">Behavioural missions reward students with no spending power. Points track avoided emissions, so a bus ride beats a coffee order. Fairness is a design constraint, not a slogan.</p>
             <p className="text-[14px] text-text-secondary mt-3">Campus ambassadors and district leaderboards build habits through peers, not paid media.</p>
           </div>
-          <div className="reveal card p-7">
+          <div className="card card-lift p-7">
             <p className="t-label">Governance</p>
-            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2">3<span className="text-[14px] font-bold text-text-secondary">decrees, by design</span></p>
+            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2"><span className="tabular-nums" data-count="3">3</span><span className="text-[14px] font-bold text-text-secondary">decrees, by design</span></p>
             <p className="text-[14px] text-text-secondary mt-2">Decree 13/2023 consent screens before any data collection. Decree 52/2024: no funds held, no payment intermediation. E-Commerce Law 2025: ambassadors verified by FPT eKYC.</p>
             <p className="text-[14px] text-text-secondary mt-3">Green-partner labels are checked against Decision 21/2025 and the VCCI CSI index, never self-declared.</p>
           </div>
         </div>
 
         {/* TODO(Minh): confirm scale-up wording and add figures once the model has them. */}
-        <div className="reveal mt-6 tone-navy card p-8 sm:p-10 grid gap-6 lg:grid-cols-[1fr_2fr]">
+        <div data-reveal="scale" className="mt-6 tone-navy card p-8 sm:p-10 grid gap-6 lg:grid-cols-[1fr_2fr]">
           <div>
             <p className="t-label">Scale-up influence</p>
             <p className="t-display text-[28px] sm:text-[36px] mt-3 leading-tight">From one city to many.</p>
@@ -290,7 +279,7 @@ export default function SolutionSection() {
             <p className="t-caption">Break-even depends on partner count, not user growth: across 12k to 40k MAU the partners needed only move between 14 and 17.</p>
           </div>
           <div>
-            <dl>
+            <dl data-stagger>
               {[
                 ["Year 1 recognised revenue", "429.1 M ₫"],
                 ["December exit run-rate, annualised", "926.4 M ₫"],
@@ -310,11 +299,12 @@ export default function SolutionSection() {
           </div>
         </div>
 
-        <div className="reveal mt-16 tone-navy card p-8 sm:p-10 flex flex-wrap items-center justify-between gap-6">
-          <p className="t-display text-[28px] sm:text-[36px]">Grow with GenFreZ.</p>
+        <div data-reveal="scale" className="aurora mt-16 tone-navy card p-8 sm:p-10 flex flex-wrap items-center justify-between gap-6">
+          <div aria-hidden="true" className="aurora-glow" />
+          <p className="t-display text-[28px] sm:text-[40px]">Grow with GenFreZ.</p>
           <div className="flex flex-wrap gap-3">
-          <Link href="/#contact" className="btn btn-primary btn-lg">Partner with us →</Link>
-          <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">Try the demo ↗</a>
+            <Link href="/#contact" className="btn btn-primary btn-lg"><span>Partner with us →</span></Link>
+            <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg"><span>Try the demo ↗</span></a>
           </div>
         </div>
       </Section>

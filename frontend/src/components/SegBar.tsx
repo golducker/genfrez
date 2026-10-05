@@ -30,7 +30,7 @@ export default function SegBar({
         aria-label={`${label ?? "progress"}: ${Math.round(value * 100)}%`}
       >
         {Array.from({ length: segments }, (_, i) => (
-          <i key={i} className={i < lit ? tone : ""} />
+          <i key={i} className={i < lit ? tone : ""} style={{ "--i": i } as React.CSSProperties} />
         ))}
       </div>
     </div>
