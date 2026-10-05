@@ -20,17 +20,6 @@ function Initials({ name }: { name: string }) {
 export default function CrewPasses({ team }: { team: Member[] }) {
   return (
     <>
-      {/* One shared duotone (navy, sky, cream) so six different photos read as a set. */}
-      <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
-        <filter id="cp-duo" colorInterpolationFilters="sRGB">
-          <feColorMatrix type="matrix" values="0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0 0 0 1 0" />
-          <feComponentTransfer>
-            <feFuncR type="table" tableValues="0.075 0.663 0.984" />
-            <feFuncG type="table" tableValues="0.204 0.871 0.965" />
-            <feFuncB type="table" tableValues="0.369 0.949 0.878" />
-          </feComponentTransfer>
-        </filter>
-      </svg>
       <CrewDeck>
         {team.map((m, i) => {
           const no = String(i + 1).padStart(2, "0");
@@ -44,10 +33,7 @@ export default function CrewPasses({ team }: { team: Member[] }) {
                   </div>
                   <div className="cp-photo">
                     {m.photo ? (
-                      <>
-                        <Image src={m.photo} alt="" aria-hidden="true" width={480} height={480} sizes="(min-width: 1024px) 340px, (min-width: 640px) 45vw, 80vw" className="cp-duo" />
-                        <Image src={m.photo} alt={m.name} width={480} height={480} sizes="(min-width: 1024px) 340px, (min-width: 640px) 45vw, 80vw" className="cp-col" />
-                      </>
+                      <Image src={m.photo} alt={m.name} width={480} height={480} sizes="(min-width: 1024px) 340px, (min-width: 640px) 45vw, 80vw" className="cp-col" />
                     ) : (
                       <Initials name={m.name} />
                     )}

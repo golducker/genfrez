@@ -151,15 +151,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 500ms ease, transform 900ms cubic-bezier(.2,.8,.2,1);
+  transition: filter 500ms ease, transform 900ms cubic-bezier(.2,.8,.2,1);
 }
-.cp-duo { filter: url(#cp-duo); }
-.cp-col { opacity: 0; }
-
-/* Full colour on hover, focus, or when the pass is centred in the phone deck. */
+/* Photos are always in colour; they get punchier on hover, focus, or when the pass is centred in the phone deck. */
+.cp-col { filter: saturate(0.95); }
 .cp-pass:hover .cp-col,
 .cp-pass:focus-within .cp-col,
-.cp-pass.is-live .cp-col { opacity: 1; }
+.cp-pass.is-live .cp-col { filter: saturate(1.35) contrast(1.06) brightness(1.04); }
 .cp-pass:hover .cp-photo img { transform: scale(1.04); }
 
 .cp-initials {
@@ -195,7 +193,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   /* Colour by default and no tilt. */
-  .cp-col { opacity: 1; }
   .cp-photo img { transition: none; }
   .cp-pass:hover .cp-photo img { transform: none; }
   .cp-card { transform: none !important; }
