@@ -7,6 +7,7 @@ import SegBar from "@/components/SegBar";
 import PointsCardPlay from "@/components/PointsCardPlay";
 import Icon from "@/components/Icon";
 import NextStop from "@/components/NextStop";
+import RateBand from "@/components/RateBand";
 import Split from "@/components/fx/Split";
 import Leaves from "@/components/fx/Leaves";
 import Marquee from "@/components/fx/Marquee";
@@ -128,14 +129,6 @@ export default function HomeSection() {
           <div className="mt-6">
             <Stat size="xl" value="95" countTo={95} unit="g CO₂ / km" label="Baseline · petrol motorbike in Hanoi traffic" />
           </div>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2" data-stagger>
-            <p className="rounded-2xl bg-surface px-5 py-4 text-[15px] text-text-primary">
-              <span className="block t-data text-[24px] text-text-display">1 point</span>= 25 g CO₂ avoided
-            </p>
-            <p className="rounded-2xl bg-surface px-5 py-4 text-[15px] text-text-primary">
-              <span className="block t-data text-[24px] text-text-display">1 point</span>= 100 đ voucher value
-            </p>
-          </div>
         </div>
 
         <div data-reveal="right" className="card p-8 sm:p-10 grid gap-7 content-center">
@@ -148,6 +141,9 @@ export default function HomeSection() {
           </p>
         </div>
       </section>
+
+      {/* THE RATE, full bleed */}
+      <RateBand />
 
       {/* ONE MOVE, THREE IMPACTS */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24">

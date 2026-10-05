@@ -7,6 +7,7 @@ import DemoStage, { type DemoScreen } from "@/components/DemoStage";
 import DemoVideo from "@/components/DemoVideo";
 import RouteSteps from "@/components/RouteSteps";
 import NextStop from "@/components/NextStop";
+import ChapterNum from "@/components/ChapterNum";
 import TicketRail, { type Receipt, type TicketItem } from "@/components/TicketRail";
 import PointsCalc from "@/components/PointsCalc";
 import Split from "@/components/fx/Split";
@@ -15,11 +16,13 @@ import Stat from "@/components/Stat";
 import { site } from "@/lib/site";
 
 /* Mascots only where the copy is not about money or terms. */
-function Section({ id, label, title, mascot, children }: { id: string; label: string; title: string; mascot?: MascotName; children: React.ReactNode }) {
+/* n draws the giant chapter numeral; the header steps aside from it on laptops. */
+function Section({ id, n, label, title, mascot, children }: { id: string; n: number; label: string; title: string; mascot?: MascotName; children: React.ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
-        <div className="flex items-end justify-between gap-6">
+    <section id={id} className="scroll-mt-24 relative">
+      <ChapterNum n={n} />
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
+        <div className={`flex items-end justify-between gap-6 ${n % 2 ? "lg:pl-[30%]" : "lg:pr-[30%]"}`}>
           <div>
             <p data-reveal className="t-label label-rule text-accent-text">{label}</p>
             <h3 data-split className="t-display text-[34px] sm:text-[56px] mt-4 max-w-3xl">
@@ -89,7 +92,7 @@ export default function SolutionSection() {
       </section>
 
       {/* PROBLEM */}
-      <Section id="problem" label="01 · The problem" mascot="fluffy-scared" title="Hanoi's greenest choices pay nothing. Its dirtiest one is the default.">
+      <Section id="problem" n={1} label="01 · The problem" mascot="fluffy-scared" title="Hanoi's greenest choices pay nothing. Its dirtiest one is the default.">
         <p data-scrub className="max-w-4xl text-[24px] sm:text-[34px] font-bold tracking-[-0.02em] text-text-display leading-snug">
           <Split text="Every kilometre on a petrol motorbike in Hanoi traffic puts out 95 g of CO₂, and Gen Z rides them every day. Taking the bus instead pays nothing back." />
         </p>
@@ -134,7 +137,7 @@ export default function SolutionSection() {
       </Section>
 
       {/* HOW IT WORKS */}
-      <Section id="how" label="02 · The AI-powered engine" title="One published formula prices every point. Anyone can check it.">
+      <Section id="how" n={2} label="02 · The AI-powered engine" title="One published formula prices every point. Anyone can check it.">
         <p className="max-w-2xl text-[17px] text-text-primary leading-relaxed">
           The GenFreZ Zalo Mini App records your trips and purchases. We work out the CO₂ you avoided and price it in points. Learned models decide where reward budget goes and who is gaming the system. Rule-based lookups handle anything that has to stay auditable.
         </p>
@@ -194,7 +197,7 @@ export default function SolutionSection() {
       </Section>
 
       {/* DEMO */}
-      <Section id="demo" label="03 · Demo" title="The Mini App, running now. Tap it.">
+      <Section id="demo" n={3} label="03 · Demo" title="The Mini App, running now. Tap it.">
         <DemoStage screens={DEMO_SCREENS} />
 
         <div className="mt-20 sm:mt-28">
@@ -209,12 +212,12 @@ export default function SolutionSection() {
       </Section>
 
       {/* FEATURES */}
-      <Section id="features" label="04 · Key features & benefits" title="Built for people who spend often, not big.">
+      <Section id="features" n={4} label="04 · Key features & benefits" title="Built for people who spend often, not big.">
         <TicketRail features={FEATURES} receipts={RECEIPTS} />
       </Section>
 
       {/* ESG */}
-      <Section id="esg" label="05 · ESG impact" title="Environmental, social, governance. Measured, not asserted.">
+      <Section id="esg" n={5} label="05 · ESG impact" title="Environmental, social, governance. Measured, not asserted.">
         <div className="grid gap-4 lg:grid-cols-3" data-stagger>
           <div className="card card-lift p-7">
             <p className="t-label">Environmental</p>
@@ -251,7 +254,7 @@ export default function SolutionSection() {
       </Section>
 
       {/* OUTCOMES */}
-      <Section id="outcomes" label="06 · Expected outcomes & metrics" title="Year 1 targets, stated as assumptions.">
+      <Section id="outcomes" n={6} label="06 · Expected outcomes & metrics" title="Year 1 targets, stated as assumptions.">
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
           <div className="grid gap-8">
             <SegBar label="Monthly active users · Q4 target 12,000" readout="1.5k → 12k" value={1} height={12} />

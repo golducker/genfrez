@@ -1,0 +1,105 @@
+/* Chapter type: giant chapter numerals (ChapterNum) and the leaf-green rate band (RateBand). */
+
+:root {
+  --cn-base: rgb(19 52 94 / 0.07);
+  --cn-fill: #c8efa5;
+  --rb-bg: #7dc62f;
+  --rb-ink: #13345e;
+  --rb-ghost: rgb(19 52 94 / 0.16);
+  --rb-eq: #fbf6e0;
+}
+:root[data-theme="dark"] {
+  --cn-base: rgb(251 246 224 / 0.06);
+  --cn-fill: rgb(125 198 47 / 0.26);
+  --rb-bg: #6fb428;
+  --rb-ink: #0d2440;
+  --rb-ghost: rgb(13 36 64 / 0.2);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --cn-base: rgb(251 246 224 / 0.06);
+    --cn-fill: rgb(125 198 47 / 0.26);
+    --rb-bg: #6fb428;
+    --rb-ink: #0d2440;
+    --rb-ghost: rgb(13 36 64 / 0.2);
+  }
+}
+.tone-navy {
+  --cn-base: rgb(251 246 224 / 0.06);
+  --cn-fill: rgb(125 198 47 / 0.26);
+}
+
+/* ---------- Chapter numerals ---------- */
+
+/* Full-width clip layer at the top of the section, so the numeral bleeds off the screen edge
+   without widening the page. The section itself is position: relative. */
+.cn-clip { position: absolute; inset: 0 0 auto 0; overflow: hidden; pointer-events: none; user-select: none; z-index: 0; }
+.cn-clip.is-right { text-align: right; }
+.cn-num {
+  --fill: 100%;
+  display: inline-block;
+  font-weight: 900;
+  font-size: clamp(220px, 40vw, 600px);
+  line-height: 0.78;
+  letter-spacing: -0.08em;
+  padding-top: 0.08em;
+  color: transparent;
+  /* A tint fill, never -webkit-text-stroke: this variable Montserrat shows its inner contours. */
+  background: linear-gradient(90deg, var(--cn-fill) var(--fill), var(--cn-base) var(--fill));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.is-left .cn-num { margin-left: -0.12em; padding-right: 0.1em; }
+.is-right .cn-num { margin-right: -0.18em; padding-left: 0.1em; }
+html.motion .cn-num { --fill: 0%; }
+/* Phones: smaller and behind the headline. */
+@media (max-width: 639px) {
+  .cn-num { font-size: 60vw; }
+}
+
+/* ---------- Rate band ---------- */
+
+.rb { position: relative; background: var(--rb-bg); color: var(--rb-ink); contain: layout paint; }
+.rb-frame { display: flex; align-items: center; padding: 72px 0 80px; }
+@media (min-width: 1024px) and (min-height: 700px) {
+  /* Sticky frame inside a taller band instead of a GSAP pin. */
+  .rb { height: 170vh; }
+  .rb-frame { position: sticky; top: 0; height: 100vh; padding: 64px 0 0; }
+}
+.rb-label { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.rb-rows { margin-top: 28px; }
+.rb-line {
+  --fill: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 0.12em;
+  margin-top: 0.04em;
+  padding-left: calc(var(--step) * 0.6em);
+  font-size: clamp(72px, 13.5vw, 200px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+}
+.rb-num { padding-right: 0.06em; }
+.rb-num, .rb-unit {
+  color: transparent;
+  background: linear-gradient(90deg, var(--rb-ink) var(--fill), var(--rb-ghost) var(--fill));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.rb-eq { color: var(--rb-eq); font-weight: 300; font-size: 0.5em; align-self: center; }
+.rb-unit { font-size: 0.28em; letter-spacing: -0.03em; line-height: 1; padding-right: 0.1em; }
+.rb-unit small { display: block; font-size: 0.5em; font-weight: 600; letter-spacing: -0.01em; margin-top: 0.15em; }
+.rb-rows { position: relative; }
+.rb-note { margin-top: 36px; max-width: 26rem; font-size: 17px; font-weight: 600; line-height: 1.45; }
+@media (min-width: 1024px) {
+  /* Beside the short first line, clear of the stepped ones. */
+  .rb-note { position: absolute; right: 0; top: 48px; margin: 0; font-size: 18px; }
+}
+@media (max-width: 639px) {
+  .rb-line { font-size: 21vw; padding-left: calc(var(--step) * 0.2em); }
+  .rb-unit { font-size: 0.34em; }
+  .rb-unit small { white-space: normal; max-width: 7.5em; }
+}
+html.motion .rb-line { --fill: 0%; font-weight: 300; }
