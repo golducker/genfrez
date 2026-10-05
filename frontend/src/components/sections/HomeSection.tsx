@@ -116,7 +116,7 @@ export default function HomeSection() {
               <i>
                 <Icon name="bus" size={15} />
               </i>
-              Bus 08 · 5 km <b>+3.8</b>
+              Bus 08 · 5 km <b>+5.7</b>
             </span>
             <span className="chip-float right-0 sm:-right-6 bottom-6" style={{ "--cd": "4.7s" } as React.CSSProperties} aria-hidden="true">
               <i>

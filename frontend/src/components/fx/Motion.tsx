@@ -25,8 +25,10 @@ gsap.registerPlugin(ScrollTrigger);
  * first paint. With reduced motion none of this runs and everything is simply visible. If the page
  * took so long to hydrate that the head script's failsafe already dropped html.motion, content is
  * left visible rather than hidden again and replayed.
- * Every start position is wrapped in clamp(), so things at the very bottom of the page (the footer
- * wordmark on a phone) still fire when the scroll cannot reach their normal start point.
+ * Split headings start at clamp(top 90%), so the footer wordmark at the very bottom of the page
+ * still fires on a phone where the scroll cannot reach its normal start point. The other entrances
+ * keep plain starts: a clamped start of 0 never fires at scroll position 0, which would leave the
+ * hero's points card at 0 until the first scroll.
  * The effect re-runs on every route change, so a client-side navigation back to / (from the 404
  * page, say) wires up the new page instead of leaving it hidden.
  */
@@ -57,7 +59,7 @@ function entrances(root: HTMLElement) {
   });
   groups.forEach((els, k) => {
     ScrollTrigger.batch(els, {
-      start: "clamp(top 88%)",
+      start: "top 88%",
       once: true,
       onEnter: (batch) =>
         gsap.to(batch, {
@@ -84,7 +86,7 @@ function entrances(root: HTMLElement) {
     gsap.set(kids, { y: 48, opacity: 0, filter: "blur(6px)" });
     ScrollTrigger.create({
       trigger: group,
-      start: "clamp(top 86%)",
+      start: "top 86%",
       once: true,
       onEnter: () =>
         gsap.to(kids, {
@@ -131,7 +133,7 @@ function entrances(root: HTMLElement) {
     el.textContent = fmt(0, decimals, sep, dec);
     ScrollTrigger.create({
       trigger: el,
-      start: "clamp(top 92%)",
+      start: "top 92%",
       once: true,
       onEnter: () =>
         gsap.to(o, {
@@ -146,7 +148,7 @@ function entrances(root: HTMLElement) {
     });
   });
 
-  ScrollTrigger.batch(".seg", { start: "clamp(top 92%)", once: true, onEnter: (b) => b.forEach((el) => el.classList.add("seg-in")) });
+  ScrollTrigger.batch(".seg", { start: "top 92%", once: true, onEnter: (b) => b.forEach((el) => el.classList.add("seg-in")) });
 }
 
 /** Scroll-linked effects that only move things, never hide them. */
