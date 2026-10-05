@@ -133,7 +133,11 @@ export default function PointsCalc() {
       <div className="calc-out grid content-between gap-8">
         <div>
           <p className="t-label">Avoided CO₂</p>
-          <p className="t-display text-[64px] sm:text-[96px] mt-2 flex items-baseline gap-2" aria-live="polite">
+          {/* The figures below roll frame by frame, so they are hidden from screen readers; this announces the result once. */}
+          <span className="sr-only" aria-live="polite">
+            {`${r.avoided.toLocaleString("en-US")} grams of CO₂ avoided, ${r.points} points, ${r.vnd.toLocaleString("en-US")} đồng voucher value`}
+          </span>
+          <p className="t-display text-[64px] sm:text-[96px] mt-2 flex items-baseline gap-2" aria-hidden="true">
             <span className="calc-big">
               <RollingNumber value={r.avoided} />
             </span>
@@ -144,13 +148,13 @@ export default function PointsCalc() {
         <div className="grid grid-cols-2 gap-4">
           <div className="calc-chip">
             <p className="t-label">Points issued</p>
-            <p ref={pointsEl} className="t-data text-[40px] text-text-display mt-1 leading-none">
+            <p ref={pointsEl} className="t-data text-[40px] text-text-display mt-1 leading-none" aria-hidden="true">
               <RollingNumber value={r.points} />
             </p>
           </div>
           <div className="calc-chip">
             <p className="t-label">Voucher value</p>
-            <p className="t-data text-[40px] text-text-display mt-1 leading-none">
+            <p className="t-data text-[40px] text-text-display mt-1 leading-none" aria-hidden="true">
               <RollingNumber value={r.vnd} />
               <span className="text-[18px] ml-1">₫</span>
             </p>

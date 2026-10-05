@@ -44,15 +44,24 @@ export default function RouteSteps() {
   const wrap = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (reducedMotion()) return;
     const root = wrap.current!;
+    const road = root.querySelector<SVGPathElement>(".route-road")!;
+    const marker = root.querySelector<SVGGElement>(".route-marker")!;
+    const nodes = gsap.utils.toArray<SVGGElement>(".route-node", root);
+
+    // Reduced motion: show the finished trip, nothing moves.
+    if (reducedMotion()) {
+      nodes.forEach((n) => n.classList.add("on"));
+      marker.setAttribute("transform", "translate(1000 120)"); // the road's end point (see ROAD)
+      return;
+    }
+
     const mm = gsap.matchMedia();
 
-    mm.add("(min-width: 1024px) and (min-height: 680px)", () => {
-      const road = root.querySelector<SVGPathElement>(".route-road")!;
+    // The ride itself. Pinned when the whole block fits on screen; on shorter laptop screens the
+    // same ride plays out while the block scrolls past, so nothing animates out of view.
+    function ride(pin: boolean) {
       const glow = root.querySelector<SVGPathElement>(".route-glow")!;
-      const marker = root.querySelector<SVGGElement>(".route-marker")!;
-      const nodes = gsap.utils.toArray<SVGGElement>(".route-node", root);
       const cards = gsap.utils.toArray<HTMLElement>(".route-card", root);
       const vals = gsap.utils.toArray<HTMLElement>(".ledger-v", root);
       const len = road.getTotalLength();
@@ -75,7 +84,9 @@ export default function RouteSteps() {
       let lit = -1;
 
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: root, start: "top top+=90", end: "+=1500", scrub: 0.7, pin: true, anticipatePin: 1 },
+        scrollTrigger: pin
+          ? { trigger: root, start: "top top+=90", end: "+=1500", scrub: 0.7, pin: true, anticipatePin: 1 }
+          : { trigger: root, start: "top 72%", end: "bottom 80%", scrub: 0.7 },
       });
       tl.to(o, {
         p: 1,
@@ -107,11 +118,15 @@ export default function RouteSteps() {
         },
       });
       return () => tl.kill();
-    });
+    }
 
-    mm.add("(max-width: 1023px), (max-height: 679px)", () => {
+    // 860px tall fits the pinned block (about 740px) under the nav.
+    mm.add("(min-width: 1024px) and (min-height: 860px)", () => ride(true));
+    mm.add("(min-width: 1024px) and (max-height: 859px)", () => ride(false));
+
+    mm.add("(max-width: 1023px)", () => {
       gsap.utils.toArray<HTMLElement>(".route-card", root).forEach((c) =>
-        gsap.from(c, { x: -40, opacity: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: c, start: "top 88%", once: true } })
+        gsap.from(c, { x: -40, opacity: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: c, start: "clamp(top 88%)", once: true } })
       );
       const line = root.querySelector(".route-vline i");
       if (line) gsap.fromTo(line, { scaleY: 0 }, { scaleY: 1, ease: "none", scrollTrigger: { trigger: root, start: "top 70%", end: "bottom 60%", scrub: true } });
@@ -124,7 +139,7 @@ export default function RouteSteps() {
   return (
     <div ref={wrap} className="route">
       <p className="t-label mb-2">How it works · from trip to voucher</p>
-      <p className="t-caption mb-6 hidden lg:block">Keep scrolling to ride one 5 km e-bike trip through the engine.</p>
+      <p className="route-hint t-caption mb-6 hidden lg:block">Keep scrolling to ride one 5 km e-bike trip through the engine.</p>
 
       {/* Road (wide screens) */}
       <div className="hidden lg:block relative">

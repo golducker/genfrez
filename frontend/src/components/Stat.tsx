@@ -23,9 +23,17 @@ export default function Stat({
     <div>
       <p className="t-label">{label}</p>
       <p className={`t-display ${cls} mt-2 flex items-baseline gap-2 flex-wrap`}>
-        <span className="tabular-nums" data-count={countTo} data-decimals={countTo !== undefined ? decimals : undefined}>
-          {value}
-        </span>
+        {countTo !== undefined ? (
+          <>
+            {/* The animated digits start at 0, so screen readers read the final figure instead. */}
+            <span className="sr-only">{value}</span>
+            <span className="tabular-nums" aria-hidden="true" data-count={countTo} data-decimals={decimals}>
+              {value}
+            </span>
+          </>
+        ) : (
+          <span>{value}</span>
+        )}
         {unit && <span className="font-mono text-[12px] tracking-[0.08em] uppercase text-text-secondary font-normal">{unit}</span>}
       </p>
       {note && <p className="mt-2 text-[14px] text-text-secondary max-w-xs">{note}</p>}

@@ -22,6 +22,8 @@ export default function FlowCanvas() {
     if (!parts.length || !bg.current || !bloom.current || !route.current || !fill.current) return;
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const stops = parts.map(() => route.current!.appendChild(document.createElement("b")));
+    // The nav's progress line. Set on the bar itself, not <html>, so a scroll frame restyles one element.
+    const bar = document.querySelector<HTMLElement>(".nav-progress");
     let raf = 0;
 
     function placeStops() {
@@ -52,7 +54,7 @@ export default function FlowCanvas() {
       const total = document.documentElement.scrollHeight - vh;
       const prog = total > 0 ? y / total : 0;
       fill.current!.style.height = `${prog * 100}%`;
-      document.documentElement.style.setProperty("--progress", prog.toFixed(4));
+      bar?.style.setProperty("--progress", prog.toFixed(4));
       stops.forEach((b, i) => b.classList.toggle("on", i <= cur));
       setFlowSection(parts[cur].dataset.flow as FlowId);
     }

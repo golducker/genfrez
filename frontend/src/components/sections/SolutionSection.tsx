@@ -236,7 +236,7 @@ export default function SolutionSection() {
         <div className="grid gap-4 lg:grid-cols-3" data-stagger>
           <div className="card card-lift p-7">
             <p className="t-label">Environmental</p>
-            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2"><span className="tabular-nums" data-count="325">325</span><span className="text-[14px] font-bold text-text-secondary">g CO₂</span></p>
+            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2"><span className="sr-only">325</span><span className="tabular-nums" aria-hidden="true" data-count="325">325</span><span className="text-[14px] font-bold text-text-secondary">g CO₂</span></p>
             <p className="text-[14px] text-text-secondary mt-2">avoided per 5 km e-bike trip replacing a petrol motorbike. Marginal-emissions accounting means bus riders are rewarded for the trip they displaced, with the arithmetic shown.</p>
             <p className="text-[14px] text-text-secondary mt-3">Fewer motorbike kilometres in Hanoi means less PM2.5 and less peak-hour congestion, with off-peak bonuses learned per corridor.</p>
           </div>
@@ -248,7 +248,7 @@ export default function SolutionSection() {
           </div>
           <div className="card card-lift p-7">
             <p className="t-label">Governance</p>
-            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2"><span className="tabular-nums" data-count="3">3</span><span className="text-[14px] font-bold text-text-secondary">decrees, by design</span></p>
+            <p className="t-display text-[48px] mt-3 flex items-baseline gap-2"><span className="sr-only">3</span><span className="tabular-nums" aria-hidden="true" data-count="3">3</span><span className="text-[14px] font-bold text-text-secondary">decrees, by design</span></p>
             <p className="text-[14px] text-text-secondary mt-2">Decree 13/2023 consent screens before any data collection. Decree 52/2024: no funds held, no payment intermediation. E-Commerce Law 2025: ambassadors verified by FPT eKYC.</p>
             <p className="text-[14px] text-text-secondary mt-3">Green-partner labels are checked against Decision 21/2025 and the VCCI CSI index, never self-declared.</p>
           </div>

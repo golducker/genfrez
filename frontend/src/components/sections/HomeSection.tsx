@@ -204,7 +204,8 @@ export default function HomeSection() {
       </section>
 
       {/* REWARDS RIBBON */}
-      <section aria-label="Reward categories" className="overflow-hidden py-10 sm:py-14 select-none">
+      {/* Decorative: the same categories are listed as text in the next section. */}
+      <section aria-hidden="true" className="overflow-hidden py-10 sm:py-14 select-none">
         <div className="-mx-12 grid gap-2 -rotate-2">
         <Marquee
           speed={46}
@@ -267,7 +268,9 @@ export default function HomeSection() {
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-20 sm:pt-28">
         <div data-reveal="scale" className="aurora tone-navy card relative px-8 py-10 sm:px-12 sm:py-12 grid gap-8 sm:grid-cols-[auto_1fr_auto] items-center">
           <div aria-hidden="true" className="aurora-glow" />
-          <Mascot name="megaphone" scale={1} className="hidden sm:inline-block bob" />
+          <span className="hidden sm:inline-block">
+            <Mascot name="megaphone" scale={1} className="bob" />
+          </span>
           <p className="t-display text-[32px] sm:text-[44px]">Ready to make your move?</p>
           <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-primary btn-lg justify-self-start">
             <span>Try the live demo ↗</span>

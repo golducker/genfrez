@@ -52,12 +52,14 @@ export default function DemoStage({ screens }: { screens: DemoScreen[] }) {
   const [state, setState] = useState<"waiting" | "loading" | "ready" | "slow">("waiting");
   const [nonce, setNonce] = useState(0);
 
-  // Fit the device to the column and the window, at most 1:1.
+  // Fit the device to the column and the window, at most 1:1. The height comes from the root
+  // element's clientHeight, which (unlike innerHeight) stays put while a mobile browser's toolbar
+  // slides in and out, so the phone does not resize mid-scroll.
   useEffect(() => {
     const el = col.current!;
     const fit = () => {
       const w = el.clientWidth;
-      const h = innerHeight - 120;
+      const h = document.documentElement.clientHeight - 120;
       setScale(Math.max(0.55, Math.min(1, w / DEVICE_W, h / DEVICE_H)));
     };
     const ro = new ResizeObserver(fit);
