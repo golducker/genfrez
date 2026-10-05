@@ -6,31 +6,20 @@ import Icon from "./Icon";
 import RollingNumber from "./fx/RollingNumber";
 import { burst } from "./ClickFx";
 import { play } from "@/lib/sfx";
+import { MODES, BASELINE, BUDGET, avoidedG, tripPoints, toVnd, type ModeId } from "@/lib/points";
 
-const MODES = [
-  { id: "bus", label: "Bus", factor: 0, tier: "A-2", conf: 1.0, icon: "bus" },
-  { id: "ebike", label: "E-bike", factor: 30, tier: "A-1", conf: 1.0, icon: "bike" },
-  { id: "bicycle", label: "Public bike", factor: 0, tier: "A-1", conf: 1.0, icon: "bike" },
-  { id: "walk", label: "Walk (GPS)", factor: 0, tier: "B", conf: 0.7, icon: "leaf" },
-] as const;
-
-const BASELINE = 95; // g CO2/km, petrol motorbike
-const G_PER_POINT = 25;
-const VND_PER_POINT = 100;
-const BUDGET = 0.3; // pilot budget coefficient
 const MAX_KM = 30;
 
 export default function PointsCalc() {
   const [km, setKm] = useState(5);
-  const [mode, setMode] = useState<(typeof MODES)[number]["id"]>("ebike");
+  const [mode, setMode] = useState<ModeId>("ebike");
   const m = MODES.find((x) => x.id === mode)!;
   const pointsEl = useRef<HTMLParagraphElement>(null);
 
+  // Points keep one decimal (bus 5 km = 5.7), the same figure the hero card and the ledger show.
   const r = useMemo(() => {
-    const avoided = km * (BASELINE - m.factor);
-    const raw = avoided / G_PER_POINT;
-    const points = Math.round(raw * m.conf * 1 * BUDGET);
-    return { avoided, raw, points, vnd: points * VND_PER_POINT };
+    const points = tripPoints(km, m.id);
+    return { avoided: avoidedG(km, m.factor), points, vnd: toVnd(points) };
   }, [km, m]);
 
   // A small celebration whenever the points figure goes up.
@@ -44,25 +33,20 @@ export default function PointsCalc() {
     lastPoints.current = next;
   }
 
-  function points(kmV: number, f: number, conf: number) {
-    return Math.round(((kmV * (BASELINE - f)) / G_PER_POINT) * conf * BUDGET);
-  }
-
   function onKm(v: number) {
     if (v === km) return;
     setKm(v);
     play("tick", { value: v / MAX_KM });
-    const p = points(v, m.factor, m.conf);
+    const p = tripPoints(v, m.id);
     if (p > lastPoints.current) celebrate(p);
     else lastPoints.current = p;
   }
 
-  function onMode(id: (typeof MODES)[number]["id"]) {
+  function onMode(id: ModeId) {
     if (id === mode) return;
     setMode(id);
-    const nm = MODES.find((x) => x.id === id)!;
     play("pop");
-    celebrate(points(km, nm.factor, nm.conf));
+    celebrate(tripPoints(km, id));
   }
 
   const idx = MODES.findIndex((x) => x.id === mode);
@@ -149,7 +133,7 @@ export default function PointsCalc() {
           <div className="calc-chip">
             <p className="t-label">Points issued</p>
             <p ref={pointsEl} className="t-data text-[40px] text-text-display mt-1 leading-none" aria-hidden="true">
-              <RollingNumber value={r.points} />
+              <RollingNumber value={r.points} decimals={1} />
             </p>
           </div>
           <div className="calc-chip">

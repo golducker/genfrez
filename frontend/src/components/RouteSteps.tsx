@@ -6,13 +6,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Icon, { type IconName } from "./Icon";
 import { reducedMotion } from "@/lib/motion";
 import { play } from "@/lib/sfx";
+import { avoidedG, mode, tripPoints, toVnd } from "@/lib/points";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /*
  * "From trip to voucher" as a ride. On wide screens the block pins while you scroll: the road draws
  * itself, a GenFreZ marker rides along it, each stop lights up as the marker reaches it, and the
- * ledger strip underneath fills in (5 km e-bike trip -> 325 g CO2 -> 4 points -> 400 d).
+ * ledger strip underneath fills in (5 km e-bike trip -> 325 g CO2 -> 3.9 points -> 390 d, all from lib/points).
  * On phones the same four stops stack vertically and reveal one by one.
  */
 
@@ -32,12 +33,13 @@ const STOPS = [
 ];
 const ROAD = "M0 120 C 50 60, 80 60, 125 60 C 230 60, 270 180, 375 180 C 480 180, 520 60, 625 60 C 730 60, 770 180, 875 180 C 920 180, 960 150, 1000 120";
 
+const KM = 5;
 const LEDGER = [
-  { label: "Distance", to: 5, unit: "km", d: 0 },
-  { label: "Confidence", to: 1, unit: "", d: 1 },
-  { label: "CO₂ avoided", to: 325, unit: "g", d: 0 },
-  { label: "Points", to: 4, unit: "pts", d: 0 },
-  { label: "Voucher", to: 400, unit: "₫", d: 0 },
+  { label: "Distance", to: KM, unit: "km", d: 0 },
+  { label: "Confidence", to: mode("ebike").conf, unit: "", d: 1 },
+  { label: "CO₂ avoided", to: avoidedG(KM, mode("ebike").factor), unit: "g", d: 0 },
+  { label: "Points", to: tripPoints(KM, "ebike"), unit: "pts", d: 1 },
+  { label: "Voucher", to: toVnd(tripPoints(KM, "ebike")), unit: "₫", d: 0 },
 ];
 
 export default function RouteSteps() {

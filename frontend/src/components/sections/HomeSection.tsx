@@ -4,11 +4,13 @@ import Logo from "@/components/Logo";
 import Mascot from "@/components/Mascot";
 import Stat from "@/components/Stat";
 import SegBar from "@/components/SegBar";
+import PointsCardPlay from "@/components/PointsCardPlay";
 import Icon from "@/components/Icon";
 import Split from "@/components/fx/Split";
 import Leaves from "@/components/fx/Leaves";
 import Marquee from "@/components/fx/Marquee";
 import { site } from "@/lib/site";
+import { appNum, tripPoints } from "@/lib/points";
 
 const d = (s: number) => ({ "--d": `${s}s` }) as React.CSSProperties;
 
@@ -79,62 +81,39 @@ export default function HomeSection() {
             </a>
           </div>
 
-          {/* Product moment, lifted from the Mini App home screen */}
-          <div data-hero-out className="relative mx-auto w-full max-w-[420px] pt-10 pb-24" aria-label="Preview of the GenFreZ points card" role="img">
-            <span className="enter-pop absolute -top-2 right-2 z-10" style={d(0.9)}>
+          {/* Product moment, lifted from the Mini App home screen. Hold the button to ride to Gold. */}
+          <PointsCardPlay>
+            <span className="enter-pop absolute -top-2 right-2 z-10" style={d(0.9)} aria-hidden="true">
               <Mascot name="star-cool" scale={0.9} className="bob [--r:8deg]" />
             </span>
 
-            <div className="points-card-in">
-              <div data-tilt="10" className="points-card tone-navy card p-6 sm:p-8 rounded-[32px]">
-                <p className="text-[15px] font-semibold text-text-secondary">Hello, Tèo!</p>
-                <p className="mt-5 t-label">My points</p>
-                <p className="mt-1 t-display text-[48px] sm:text-[56px]">
-                  <span className="tabular-nums" data-count="13667" data-sep="." data-delay="hero" data-duration="2.2">
-                    13.667
-                  </span>
-                  <span className="text-[20px] text-text-secondary font-bold"> / 15.000</span>
-                </p>
-                <div className="mt-4">
-                  <SegBar value={13667 / 15000} segments={24} tone="warn" height={10} />
-                </div>
-                <p className="mt-4 text-[15px] text-text-primary">
-                  <span className="font-bold text-accent-text">1.333 more points</span> and Gold is yours!
-                </p>
-                <div className="mt-6 grid grid-cols-3 gap-2">
-                  {["Missions", "Vouchers", "Scan"].map((k) => (
-                    <span key={k} className="rounded-2xl bg-surface-raised px-2 py-3 text-center text-[13px] font-bold text-text-display">
-                      {k}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             {/* Points landing in real time: three notifications take turns in the same spot */}
-            <span className="chip-float chip-first right-0 sm:-right-6 bottom-6" style={{ "--cd": "2.2s" } as React.CSSProperties} aria-hidden="true">
+            <span className="chip-float chip-first right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "2.2s" } as React.CSSProperties} aria-hidden="true">
               <i>
                 <Icon name="bus" size={15} />
               </i>
-              Bus 08 · 5 km <b>+5.7</b>
+              Bus 08 · 5 km <b>+{appNum(tripPoints(5, "bus"), 1)}</b>
             </span>
-            <span className="chip-float right-0 sm:-right-6 bottom-6" style={{ "--cd": "4.7s" } as React.CSSProperties} aria-hidden="true">
+            <span className="chip-float right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "4.7s" } as React.CSSProperties} aria-hidden="true">
               <i>
                 <Icon name="bike" size={15} />
               </i>
-              TNGo e-bike · 3 km <b>+2.3</b>
+              TNGo e-bike · 3 km <b>+{appNum(tripPoints(3, "ebike"), 1)}</b>
             </span>
-            <span className="chip-float right-0 sm:-right-6 bottom-6" style={{ "--cd": "7.2s" } as React.CSSProperties} aria-hidden="true">
+            <span className="chip-float right-0 sm:-right-6 bottom-[72px]" style={{ "--cd": "7.2s" } as React.CSSProperties} aria-hidden="true">
               <i>
                 <Icon name="leaf" size={15} />
               </i>
-              Walk · 2 km <b>+1.6</b>
+              Walk · 2 km <b>+{appNum(tripPoints(2, "walk"), 1)}</b>
             </span>
 
-            <span className="enter-pop absolute -bottom-10 -left-4 sm:-left-16" style={d(1.05)}>
-              <Mascot name="green-kiss" scale={0.95} className="bob-slow [--r:-6deg]" />
+            {/* Steps aside on phones once Gold is reached, so the caption has room */}
+            <span className="gold-shy absolute bottom-2 -left-4 sm:-left-16" aria-hidden="true">
+              <span className="enter-pop block" style={d(1.05)}>
+                <Mascot name="green-kiss" scale={0.95} className="bob-slow [--r:-6deg]" />
+              </span>
             </span>
-          </div>
+          </PointsCardPlay>
         </div>
       </section>
 

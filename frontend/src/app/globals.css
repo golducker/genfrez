@@ -428,6 +428,135 @@ html.motion .points-card-in { animation: enter-card 1.3s cubic-bezier(.16,1,.3,1
   32%, 100% { opacity: 0; transform: translateY(-16px) scale(0.95); }
 }
 
+/* ---------- Hero card: hold to ride to Gold (components/PointsCardPlay.tsx) ---------- */
+:root { --gold-hi: #fff1c4; --gold: #e9b949; --gold-deep: #b9811f; --gold-ink: #3d2a04; }
+@property --mx { syntax: "<number>"; inherits: true; initial-value: 0.5; }
+@property --my { syntax: "<number>"; inherits: true; initial-value: 0.35; }
+.points-card-in { position: relative; isolation: isolate; }
+.points-card { position: relative; z-index: 1; perspective: 1400px; }
+.gold-flip { position: relative; transform-style: preserve-3d; transition: transform 1050ms cubic-bezier(.3,1.45,.45,1); }
+.is-gold .gold-flip { transform: rotateY(180deg); }
+.gold-front, .gold-back { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.gold-back { pointer-events: none; }
+.is-gold .gold-back { pointer-events: auto; }
+/* Each face sits 1px proud of the flipper, or hit-testing on a tilted card lands on the flipper itself. */
+.gold-front { overflow: hidden; transform: translateZ(1px); }
+/* Dark page: the navy card would melt into the navy page, so it gets a cream hairline and a sky glow. */
+:root[data-theme="dark"] .gold-front { box-shadow: inset 0 0 0 1px rgb(251 246 224 / 0.12), 0 0 70px -18px rgb(169 222 242 / 0.35), 0 30px 60px -30px rgb(0 0 0 / 0.6); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .gold-front { box-shadow: inset 0 0 0 1px rgb(251 246 224 / 0.12), 0 0 70px -18px rgb(169 222 242 / 0.35), 0 30px 60px -30px rgb(0 0 0 / 0.6); } }
+.gold-tag { padding: 3px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); border: 1px solid var(--border-visible); }
+.gold-pop { position: absolute; right: -4px; top: -6px; font-size: 16px; letter-spacing: 0; color: var(--success); opacity: 0; pointer-events: none; }
+
+/* The hold button fills with the semester as it is ridden (--p goes 0..1) */
+.gold-hold {
+  position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; gap: 12px; width: 100%;
+  min-height: 52px; padding: 6px 18px 6px 6px; border-radius: 999px; cursor: pointer; text-align: left;
+  font-size: 15px; font-weight: 800; letter-spacing: -0.01em; color: var(--text-display);
+  background: rgb(251 246 224 / 0.07); box-shadow: inset 0 0 0 1.5px var(--border-visible);
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: none;
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1), background-color 200ms, box-shadow 200ms;
+}
+.gold-hold::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(90deg, rgb(125 198 47 / 0.28), rgb(125 198 47 / 0.5)); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+.gold-hold:hover { background: rgb(251 246 224 / 0.12); box-shadow: inset 0 0 0 1.5px var(--leaf); }
+.is-riding .gold-hold { transform: scale(0.98); box-shadow: inset 0 0 0 1.5px var(--leaf), 0 0 0 6px rgb(125 198 47 / 0.16); }
+.gold-hold-icon { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--orange); color: var(--ink); box-shadow: 0 8px 16px -8px rgb(242 106 27 / 0.9); }
+@media (prefers-reduced-motion: no-preference) {
+  .is-idle .gold-hold-icon { animation: hold-nudge 2.8s cubic-bezier(.3,1.6,.5,1) infinite; animation-delay: calc(var(--intro-delay, 0s) + 3s); }
+  .is-riding .gold-hold-icon > svg { animation: hold-bump 260ms ease-in-out infinite; }
+  .seg > i.charge { animation: seg-charge 420ms ease-in-out infinite alternate; }
+}
+@keyframes hold-nudge { 0%, 78%, 100% { transform: none; } 84% { transform: translateX(4px) rotate(-6deg); } 90% { transform: translateX(-2px); } }
+@keyframes hold-bump { 50% { transform: translateY(-1.5px); } }
+@keyframes seg-charge { from { background: var(--seg-empty); } to { background: rgb(242 106 27 / 0.55); } }
+
+/* Tabs while idle, the trip log while riding: both share one grid cell so the card never jumps */
+.gold-tray { display: grid; }
+.gold-tray > * { grid-area: 1 / 1; transition: opacity 300ms, transform 400ms cubic-bezier(.2,.8,.2,1); }
+.gold-ride { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 0 4px; opacity: 0; transform: translateY(8px); }
+.gold-ride b { display: block; margin-top: 3px; font-size: 18px; font-weight: 800; line-height: 1.1; color: var(--text-display); font-variant-numeric: tabular-nums; }
+.gold-ride .gold-co2 { color: var(--success); }
+.gold-date { transform-origin: 50% 100%; }
+.is-riding .gold-tabs, .is-paused .gold-tabs { opacity: 0; transform: translateY(-8px); }
+.is-riding .gold-ride, .is-paused .gold-ride { opacity: 1; transform: none; }
+/* A small bus loops along the card's bottom edge while the semester is ridden */
+.gold-road { position: absolute; left: 0; right: 0; bottom: 7px; height: 16px; opacity: 0; transition: opacity 300ms; pointer-events: none; }
+.gold-road::before { content: ""; position: absolute; left: 22px; right: 22px; top: 50%; border-top: 2px dashed rgb(251 246 224 / 0.16); }
+.gold-road > i { position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 26px; height: 16px; border-radius: 5px; background: var(--leaf); color: #13345e; }
+.is-riding .gold-road { opacity: 1; }
+
+/* Back face: a holographic Gold card. --mx/--my come from the pointer (Pointer.tsx) or the phone's tilt. */
+.gold-back {
+  position: absolute; inset: 0; display: block; overflow: hidden; border-radius: 32px; cursor: pointer; text-align: left; color: var(--gold-ink);
+  transform: rotateY(180deg) translateZ(1px);
+  background: radial-gradient(120% 90% at 8% 0%, var(--gold-hi), transparent 55%), linear-gradient(135deg, #f7d77f 0%, var(--gold) 34%, #fff0be 52%, var(--gold-deep) 78%, var(--gold) 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55), inset 0 0 0 7px rgb(255 255 255 / 0.1), 0 34px 60px -30px rgb(120 78 0 / 0.75);
+}
+.gold-foil {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: 0.6;
+  background:
+    repeating-linear-gradient(calc(105deg + var(--mx) * 50deg), rgb(255 255 255 / 0) 0 6px, rgb(255 255 255 / 0.32) 7px 8px, rgb(255 255 255 / 0) 9px 15px),
+    conic-gradient(from calc(var(--mx) * 300deg) at calc(var(--mx) * 100%) calc(var(--my) * 100%), #ff5f9e, #ffb648, #5fe08a, #4cc3ff, #a77bff, #ff5f9e);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M14 4c9 2 13 9 10 19-9-1-14-8-10-19z'/%3E%3Cpath d='M44 30c-1 9-8 14-19 11 1-9 9-14 19-11z'/%3E%3Ccircle cx='46' cy='10' r='2'/%3E%3Ccircle cx='8' cy='44' r='1.6'/%3E%3C/svg%3E") 0 0 / 56px 56px repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M14 4c9 2 13 9 10 19-9-1-14-8-10-19z'/%3E%3Cpath d='M44 30c-1 9-8 14-19 11 1-9 9-14 19-11z'/%3E%3Ccircle cx='46' cy='10' r='2'/%3E%3Ccircle cx='8' cy='44' r='1.6'/%3E%3C/svg%3E") 0 0 / 56px 56px repeat;
+}
+.gold-sheen {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at calc(var(--mx) * 100%) calc(var(--my) * 100%), rgb(255 255 255 / 0.75), rgb(255 255 255 / 0) 42%),
+    linear-gradient(calc(110deg + var(--my) * 30deg), transparent 30%, rgb(255 210 240 / 0.35) 45%, rgb(170 240 255 / 0.35) 55%, transparent 70%);
+  background-size: 100% 100%, 260% 260%;
+  background-position: 0 0, calc(var(--mx) * 100%) calc(var(--my) * 100%);
+  mix-blend-mode: overlay;
+}
+.gold-back-in { position: relative; display: grid; grid-template-rows: auto 1fr auto; height: 100%; padding: 26px 28px; }
+.gold-word {
+  align-self: center; font-size: clamp(64px, 20vw, 92px); font-weight: 800; line-height: 1; letter-spacing: 0.06em;
+  background: linear-gradient(180deg, #5a3c05, #2e1f02 60%, #6b4a0a); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 1px 0 rgb(255 248 220 / 0.8));
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* With no pointer on it (and on phones until the tilt arrives) the foil drifts on its own. */
+  @media (hover: none) { .is-gold:not(.gyro):not(.is-off) .gold-back { animation: foil-drift 7s ease-in-out infinite alternate; } }
+  @media (hover: hover) { .is-gold:not(.is-off) .points-card:not(:hover) .gold-back { animation: foil-drift 7s ease-in-out infinite alternate; } }
+}
+@keyframes foil-drift { 0% { --mx: 0.1; --my: 0.15; } 50% { --mx: 0.9; --my: 0.55; } 100% { --mx: 0.35; --my: 0.95; } }
+
+/* The voucher stub slides out from under the card, the caption follows */
+.gold-voucher {
+  position: absolute; z-index: 0; left: 12%; right: 10%; bottom: 0; height: 88px; display: flex; align-items: flex-end; gap: 14px; padding: 0 18px 14px;
+  border-radius: 0 0 20px 20px; background: #fff7dc; color: var(--gold-ink);
+  box-shadow: 0 18px 30px -18px rgb(var(--shadow) / 0.6), inset 0 -3px 0 rgb(185 129 31 / 0.25);
+  transform: translateY(-10px); transition: transform 600ms cubic-bezier(.3,1.5,.5,1);
+  -webkit-mask: radial-gradient(circle 9px at 0 70%, transparent 98%, #000) 0 0 / 51% 100% no-repeat, radial-gradient(circle 9px at 100% 70%, transparent 98%, #000) 100% 0 / 51% 100% no-repeat;
+  mask: radial-gradient(circle 9px at 0 70%, transparent 98%, #000) 0 0 / 51% 100% no-repeat, radial-gradient(circle 9px at 100% 70%, transparent 98%, #000) 100% 0 / 51% 100% no-repeat;
+}
+.gold-voucher-stub { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 12px; background: var(--orange); color: var(--ink); }
+.is-gold .gold-voucher { transform: translateY(66px) rotate(2.5deg); transition-delay: 700ms; }
+.gold-caption {
+  position: absolute; right: 0; bottom: 0; max-width: 290px; text-align: right; font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--text-primary);
+  opacity: 0; transform: translateY(10px); transition: opacity 500ms, transform 600ms cubic-bezier(.2,.8,.2,1); pointer-events: none;
+}
+.gold-caption b { color: var(--success); }
+.is-gold .gold-caption { opacity: 1; transform: none; transition-delay: 1150ms; }
+.gold-back-tag { margin-left: 4px; padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; background: rgb(61 42 4 / 0.12); }
+.gold-shy { transition: opacity 400ms, visibility 0s linear 0s; }
+@media (max-width: 639px) { .is-gold .gold-shy { opacity: 0; visibility: hidden; transition: opacity 400ms, visibility 0s linear 400ms; } }
+.gold-touch { display: none; }
+@media (hover: none) { .gold-touch { display: inline; } .gold-mouse { display: none; } }
+/* Chips pause while a ride is held and step aside for the voucher once Gold is reached */
+.is-riding .chip-float { animation-play-state: paused; }
+.is-gold .chip-float { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  /* No flip: the faces crossfade, the foil stays still. */
+  .gold-flip, .is-gold .gold-flip { transform: none; transition: none; }
+  .gold-back { transform: none; opacity: 0; transition: opacity 400ms; }
+  .gold-front { transform: none; transition: opacity 400ms; }
+  .is-gold .gold-back { opacity: 1; }
+  .is-gold .gold-front { opacity: 0; }
+  .gold-voucher, .gold-caption { transition: opacity 400ms; }
+  .is-gold .gold-voucher, .is-gold .gold-caption { transition-delay: 0s; }
+}
+
 /* Scroll cue */
 .scroll-cue { align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-secondary); }
 .scroll-cue > i { position: relative; width: 22px; height: 34px; border-radius: 12px; border: 2px solid currentColor; }

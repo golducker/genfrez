@@ -19,7 +19,7 @@ gsap.registerPlugin(ScrollTrigger);
  *   data-split                                      .split-i words rise out of a mask (see Split)
  *   data-scrub                                      .split-i words light up while you scroll past
  *   data-speed="0.3"                                parallax drift, positive = slower than the page
- *   data-count="13667" data-sep="." data-decimals   number counts up from zero
+ *   data-count="13667" data-sep="." data-decimals   number counts up from zero (stops if data-live is set)
  *   .seg                                            segmented bars fill block by block
  * The hidden start states live in globals.css under html.motion, which an inline script sets before
  * first paint. With reduced motion none of this runs and everything is simply visible. If the page
@@ -143,7 +143,11 @@ function entrances(root: HTMLElement) {
           // Counted from page load, so it only waits when the figure is on screen from the start.
           delay: el.dataset.delay === "hero" ? Math.max(0, (root.classList.contains("no-intro") ? 0.6 : 2.1) - performance.now() / 1000) : parseFloat(el.dataset.delay || "0"),
           ease: "power3.out",
-          onUpdate: () => void (el.textContent = fmt(o.v, decimals, sep, dec)),
+          // A component that takes the figure over (the hero card's hold-to-ride) sets data-live.
+          onUpdate() {
+            if (el.dataset.live) return void this.kill();
+            el.textContent = fmt(o.v, decimals, sep, dec);
+          },
         }),
     });
   });
@@ -166,10 +170,12 @@ function drifts() {
     gsap.fromTo(el, { y: -s * 120 }, { y: s * 120, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } });
   });
 
-  // Hero copy drifts up and softens as the page leaves it.
+  // Hero copy drifts up and softens as the page leaves it. data-hero-out="wide" only drifts on wide
+  // screens: on phones the hero card sits below the fold and has to stay solid to be played with.
   const hero = document.querySelector<HTMLElement>("[data-hero]");
   if (hero) {
-    gsap.to(hero.querySelectorAll("[data-hero-out]"), {
+    const wide = matchMedia("(min-width: 1024px)").matches;
+    gsap.to(gsap.utils.toArray<HTMLElement>("[data-hero-out]", hero).filter((el) => wide || el.dataset.heroOut !== "wide"), {
       y: (i) => -80 - i * 40,
       opacity: 0.2,
       ease: "none",

@@ -9,7 +9,7 @@ import { play } from "@/lib/sfx";
  * - a soft ring that trails the cursor and swells over anything clickable (the system cursor stays)
  * - magnetic pull on large buttons and [data-magnetic]
  * - a light spot that follows the cursor across every .card
- * - 3D tilt on [data-tilt]
+ * - 3D tilt on [data-tilt], which also gets --mx/--my (0..1, cursor position) for foil and glare
  * - a quiet pentatonic tick when hovering links and buttons (only after the first click unlocks audio)
  */
 export default function Pointer() {
@@ -100,6 +100,8 @@ export default function Pointer() {
         const py = (y - b.top) / b.height - 0.5;
         const max = parseFloat(tl.dataset.tilt || "8");
         tl.style.transform = `perspective(1000px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateY(-4px)`;
+        tl.style.setProperty("--mx", (px + 0.5).toFixed(3));
+        tl.style.setProperty("--my", (py + 0.5).toFixed(3));
       }
     }
 
