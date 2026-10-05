@@ -6,6 +6,7 @@ import Stat from "@/components/Stat";
 import SegBar from "@/components/SegBar";
 import PointsCardPlay from "@/components/PointsCardPlay";
 import Icon from "@/components/Icon";
+import NextStop from "@/components/NextStop";
 import Split from "@/components/fx/Split";
 import Leaves from "@/components/fx/Leaves";
 import Marquee from "@/components/fx/Marquee";
@@ -245,8 +246,12 @@ export default function HomeSection() {
 
       {/* FINAL CTA */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-20 sm:pt-28">
-        <div data-reveal="scale" className="aurora tone-navy card relative px-8 py-10 sm:px-12 sm:py-12 grid gap-8 sm:grid-cols-[auto_1fr_auto] items-center">
-          <div aria-hidden="true" className="aurora-glow" />
+        <NextStop
+          sign="02 · ABOUT US · MEET THE ZS"
+          stop="About us"
+          passengers={[{ name: "square-wave", seat: 1 }, { name: "blue-wave", seat: 3 }]}
+          className="relative px-8 py-10 sm:px-12 sm:py-12 grid gap-8 sm:grid-cols-[auto_1fr_auto] items-center"
+        >
           <span className="hidden sm:inline-block">
             <Mascot name="megaphone" scale={1} className="bob" />
           </span>
@@ -254,7 +259,7 @@ export default function HomeSection() {
           <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-primary btn-lg justify-self-start">
             <span>Try the live demo ↗</span>
           </a>
-        </div>
+        </NextStop>
       </section>
     </>
   );

@@ -6,6 +6,7 @@ import type { MascotName } from "@/lib/mascots";
 import DemoStage, { type DemoScreen } from "@/components/DemoStage";
 import DemoVideo from "@/components/DemoVideo";
 import RouteSteps from "@/components/RouteSteps";
+import NextStop from "@/components/NextStop";
 import TicketRail, { type Receipt, type TicketItem } from "@/components/TicketRail";
 import PointsCalc from "@/components/PointsCalc";
 import Split from "@/components/fx/Split";
@@ -280,13 +281,19 @@ export default function SolutionSection() {
           </div>
         </div>
 
-        <div data-reveal="scale" className="aurora mt-16 tone-navy card p-8 sm:p-10 flex flex-wrap items-center justify-between gap-6">
-          <div aria-hidden="true" className="aurora-glow" />
-          <p className="t-display text-[28px] sm:text-[40px]">Grow with GenFreZ.</p>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/#contact" className="btn btn-primary btn-lg"><span>Partner with us →</span></Link>
-            <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg"><span>Try the demo ↗</span></a>
-          </div>
+        <div className="mt-16">
+          <NextStop
+            sign="CONTACT · PARTNER WITH US"
+            stop="Contact"
+            passengers={[{ name: "heart-hug", seat: 2 }]}
+            className="p-8 sm:p-10 flex flex-wrap items-center justify-between gap-6"
+          >
+            <p className="t-display text-[28px] sm:text-[40px]">Grow with GenFreZ.</p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/#contact" className="btn btn-primary btn-lg"><span>Partner with us →</span></Link>
+              <a href={site.demoUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg"><span>Try the demo ↗</span></a>
+            </div>
+          </NextStop>
         </div>
       </Section>
     </>
