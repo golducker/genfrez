@@ -6,6 +6,7 @@ import type { MascotName } from "@/lib/mascots";
 import DemoStage, { type DemoScreen } from "@/components/DemoStage";
 import DemoVideo from "@/components/DemoVideo";
 import RouteSteps from "@/components/RouteSteps";
+import TicketRail, { type Receipt, type TicketItem } from "@/components/TicketRail";
 import PointsCalc from "@/components/PointsCalc";
 import Split from "@/components/fx/Split";
 import SegBar from "@/components/SegBar";
@@ -44,14 +45,20 @@ const DEMO_SCREENS: DemoScreen[] = [
   { title: "Scan", body: "Dynamic QR at bus stops and TNGo stations, cross-checked with GPS.", icon: "scan" },
 ];
 
-function Card({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="card card-lift p-7">
-      <h4 className="text-[18px] font-bold text-text-display">{title}</h4>
-      <p className="mt-2 text-[15px] text-text-secondary leading-relaxed">{body}</p>
-    </div>
-  );
-}
+const FEATURES: TicketItem[] = [
+  { title: "Nothing to install", body: "Runs inside Zalo. You already have Zalo open. Missions are recorded automatically." },
+  { title: "Fixed, published rate", body: "1 point = 100 ₫ of voucher = 25 g CO₂ avoided. No badges, no abstract scores." },
+  { title: "Route, never hold funds", body: "Deep link with a verification token to the partner's checkout. No e-wallet licence, no 50 B ₫ charter capital." },
+  { title: "Anti-fraud by construction", body: "Frequency caps, plausibility checks, 24–48 h pending state, and additionality that zeroes out round-trip farming." },
+  { title: "Emission reports for partners", body: "Transaction-level avoided-emission data with a confidence tier per line, for Decree 06/2022 GHG inventories." },
+];
+
+const RECEIPTS: Receipt[] = [
+  { who: "You", title: "Earn without spending", body: "Bus, walking, off-peak and ride-sharing missions issue points with no transaction. A user with no money still earns.", line: "Cost to earn", value: "0 ₫" },
+  { who: "Community", title: "Community that works", body: "District leaderboards, weekly Green Challenges, Green Ambassadors, and users voting on which partners join next.", line: "Leaderboards", value: "By district" },
+  { who: "Partners", title: "Pay on outcomes", body: "Partners fund a discount only when a rewarded user walks in. Budget risk close to zero.", line: "Paid when", value: "A user walks in" },
+  { who: "Fund", title: "Cross-subsidy fund", body: "Surplus above the 2.5% platform floor on F&B commission tops up rewards for green rides.", line: "Net / year, projected", value: "+21.6 M ₫" },
+];
 
 export default function SolutionSection() {
   const hasVideoFile = fs.existsSync(path.join(process.cwd(), "public", site.demoVideoFile));
@@ -202,33 +209,7 @@ export default function SolutionSection() {
 
       {/* FEATURES */}
       <Section id="features" label="04 · Key features & benefits" title="Built for people who spend often, not big.">
-        <div>
-          <p className="t-label mb-4">Features · what the platform does</p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
-            {[
-              ["Nothing to install", "Runs inside Zalo. You already have Zalo open. Missions are recorded automatically."],
-              ["Fixed, published rate", "1 point = 100 ₫ of voucher = 25 g CO₂ avoided. No badges, no abstract scores."],
-              ["Route, never hold funds", "Deep link with a verification token to the partner's checkout. No e-wallet licence, no 50 B ₫ charter capital."],
-              ["Anti-fraud by construction", "Frequency caps, plausibility checks, 24–48 h pending state, and additionality that zeroes out round-trip farming."],
-              ["Emission reports for partners", "Transaction-level avoided-emission data with a confidence tier per line, for Decree 06/2022 GHG inventories."],
-            ].map(([k, v]) => (
-              <Card key={k} title={k} body={v} />
-            ))}
-          </div>
-        </div>
-        <div className="mt-16">
-          <p className="t-label mb-4">Benefits · what each side gets</p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2" data-stagger>
-            {[
-              ["Earn without spending", "Bus, walking, off-peak and ride-sharing missions issue points with no transaction. A user with no money still earns."],
-              ["Community that works", "District leaderboards, weekly Green Challenges, Green Ambassadors, and users voting on which partners join next."],
-              ["Pay on outcomes", "Partners fund a discount only when a rewarded user walks in. Budget risk close to zero."],
-              ["Cross-subsidy fund", "Surplus above the 2.5% platform floor on F&B commission tops up rewards for green rides. +21.6M ₫ net per year at pilot scale."],
-            ].map(([k, v]) => (
-              <Card key={k} title={k} body={v} />
-            ))}
-          </div>
-        </div>
+        <TicketRail features={FEATURES} receipts={RECEIPTS} />
       </Section>
 
       {/* ESG */}
