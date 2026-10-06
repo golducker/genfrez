@@ -12,6 +12,7 @@ import Split from "@/components/fx/Split";
 import Leaves from "@/components/fx/Leaves";
 import HazeWipe from "@/components/fx/HazeWipe";
 import Horizon from "@/components/art/Horizon";
+import StreetSign from "@/components/route/StreetSign";
 import Marquee from "@/components/fx/Marquee";
 import { site } from "@/lib/site";
 import { appNum, tripPoints } from "@/lib/points";
@@ -62,7 +63,7 @@ export default function HomeSection() {
             </div>
           </div>
 
-          <HazeWipe className="mt-5 sm:mt-6 -mx-4 sm:-mx-6 lg:mt-3 lg:mr-0 lg:ml-[calc(50%-50vw)] lg:w-screen lg:col-span-2 lg:row-start-3">
+          <HazeWipe className="mt-5 sm:mt-6 -mx-4 sm:-mx-6 lg:mt-3 lg:mr-0 lg:ml-[calc(50%-50vw)] lg:w-screen lg:col-span-2 lg:row-start-3" sign={<StreetSign id="home" size="sm" pole="tall" />}>
             <Horizon />
           </HazeWipe>
 

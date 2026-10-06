@@ -1,6 +1,7 @@
 import ContactForm from "@/components/ContactForm";
 import Mascot from "@/components/Mascot";
 import Split from "@/components/fx/Split";
+import StreetSign from "@/components/route/StreetSign";
 import { site } from "@/lib/site";
 
 export default function ContactSection() {
@@ -17,8 +18,11 @@ export default function ContactSection() {
               Partners, judges, mentors, students: write to us. We reply within two working days.
             </p>
           </div>
-          <div data-reveal="pop" className="hidden lg:block">
-            <Mascot name="heart-hug" scale={1.4} className="bob" />
+          <div className="order-first lg:order-none flex items-end gap-8">
+            <StreetSign id="contact" />
+            <div data-reveal="pop" className="hidden lg:block">
+              <Mascot name="heart-hug" scale={1.4} className="bob" />
+            </div>
           </div>
         </div>
       </section>

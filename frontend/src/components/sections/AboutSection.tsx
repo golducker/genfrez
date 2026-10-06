@@ -2,6 +2,7 @@ import Link from "next/link";
 import CrewPasses from "@/components/CrewPasses";
 import Mascot from "@/components/Mascot";
 import Split from "@/components/fx/Split";
+import StreetSign from "@/components/route/StreetSign";
 import { site, team } from "@/lib/site";
 
 export default function AboutSection() {
@@ -18,8 +19,11 @@ export default function AboutSection() {
               We are a team from Foreign Trade University and the University of Queensland competing in the {site.event}. GenFreZ is our answer to a question we kept asking on the way to class: why does riding the bus in Hanoi earn you nothing, when it is one of the greenest choices a student can make?
             </p>
           </div>
-          <div data-reveal="pop" className="hidden lg:block">
-            <Mascot name="square-wave" scale={1.4} className="bob" />
+          <div className="order-first lg:order-none flex items-end gap-8">
+            <StreetSign id="about" />
+            <div data-reveal="pop" className="hidden lg:block">
+              <Mascot name="square-wave" scale={1.4} className="bob" />
+            </div>
           </div>
         </div>
       </section>

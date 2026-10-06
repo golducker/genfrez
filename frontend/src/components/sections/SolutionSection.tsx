@@ -11,6 +11,8 @@ import ChapterNum from "@/components/ChapterNum";
 import TicketRail, { type Receipt, type TicketItem } from "@/components/TicketRail";
 import PointsCalc from "@/components/PointsCalc";
 import Split from "@/components/fx/Split";
+import StreetSign from "@/components/route/StreetSign";
+import { stop } from "@/lib/route";
 import SegBar from "@/components/SegBar";
 import Stat from "@/components/Stat";
 import { site } from "@/lib/site";
@@ -22,13 +24,18 @@ function Section({ id, n, label, title, mascot, children }: { id: string; n: num
     <section id={id} className="scroll-mt-24 relative">
       <ChapterNum n={n} />
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
-        <div className={`flex items-end justify-between gap-6 ${n % 2 ? "lg:pl-[30%]" : "lg:pr-[30%]"}`}>
+        <div className={`flex flex-wrap sm:flex-nowrap items-end justify-between gap-x-6 ${n % 2 ? "lg:pl-[30%]" : "lg:pr-[30%]"}`}>
           <div>
             <p data-reveal className="t-label label-rule text-accent-text">{label}</p>
             <h3 data-split className="t-display text-[34px] sm:text-[56px] mt-4 max-w-3xl">
               <Split text={title} />
             </h3>
           </div>
+          {stop(id) && (
+            <div className="section-sign shrink-0">
+              <StreetSign id={id} />
+            </div>
+          )}
           {mascot && (
             <div data-reveal="pop" className="hidden md:block shrink-0">
               <Mascot name={mascot} scale={1.1} className="bob" />
@@ -70,6 +77,9 @@ export default function SolutionSection() {
     <>
       <section className="relative">
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-16 sm:pt-24 pb-16">
+        <div className="mb-8 lg:mb-0 lg:absolute lg:right-6 lg:top-24">
+          <StreetSign id="solution" />
+        </div>
         <p data-reveal className="t-label label-rule">Solution</p>
         <h2 data-split className="t-display text-[44px] sm:text-[88px] mt-4 max-w-5xl">
           <Split text="A points engine where the currency is" /> <Split text="avoided CO₂." className="text-[var(--success)]" />

@@ -97,7 +97,7 @@ function cutEdge(g: CanvasRenderingContext2D, w: number, h: number, edge: number
   g.fillRect(0, 0, Math.min(w, e + s / 2), h);
 }
 
-export default function HazeWipe({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+export default function HazeWipe({ children, className = "", sign }: { children: React.ReactNode; className?: string; sign?: React.ReactNode }) {
   const [phase, setPhase] = useState<Phase>("still");
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -447,6 +447,7 @@ export default function HazeWipe({ children, className = "" }: { children: React
           </button>
         )}
       </div>
+      {sign && <div className="street-sign">{sign}</div>}
       <p className="sr-only">
         A drawing of a Hanoi street under motorbike haze, as much CO₂ as one student&apos;s commute makes in a day ({DAY_G} g). A green
         number 08 bus drives through and the air clears behind it.

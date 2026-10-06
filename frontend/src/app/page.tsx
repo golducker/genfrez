@@ -1,4 +1,6 @@
 import FlowCanvas from "@/components/FlowCanvas";
+import RouteFx from "@/components/route/RouteFx";
+import RouteHud from "@/components/route/RouteHud";
 import HomeSection from "@/components/sections/HomeSection";
 import AboutSection from "@/components/sections/AboutSection";
 import SolutionSection from "@/components/sections/SolutionSection";
@@ -9,6 +11,8 @@ export default function Page() {
   return (
     <>
       <FlowCanvas />
+      <RouteFx />
+      <RouteHud />
       <div id="home" data-flow="home" className="scroll-mt-24">
         <HomeSection />
       </div>

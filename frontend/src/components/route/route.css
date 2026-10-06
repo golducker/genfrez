@@ -1,0 +1,150 @@
+/* ======================================================================================
+   Route: Hanoi street signs, one per section, Chùa Láng to Hoàn Kiếm Lake.
+   The old left-gutter flow rail is replaced by the route HUD.
+   ====================================================================================== */
+.flow-route { display: none !important; }
+
+/* ---------- Pole-mounted sign ---------- */
+.rs {
+  --rs-blue-a: #2b7bd2; --rs-blue-b: #1c5daa; --rs-blue-c: #164c8d;
+  --rs-ink: #f7fbff; --rs-pole-a: #6f777e; --rs-pole-b: #dfe4e8; --rs-pole-c: #899198;
+  --rs-name: 29px; --rs-kind: 14.5px; --rs-emblem: 29px; --rs-pole-down: 46px;
+  position: relative; display: inline-block; padding-right: 17px; perspective: 900px; vertical-align: top;
+  -webkit-tap-highlight-color: transparent; cursor: pointer;
+}
+.rs--sm { --rs-name: 18px; --rs-kind: 10.5px; --rs-emblem: 19px; --rs-pole-down: 34px; }
+.rs--dest { --rs-blue-a: #96603b; --rs-blue-b: #74431f; --rs-blue-c: #5b3317; }
+
+.rs-pole {
+  position: absolute; right: 3px; top: -12px; bottom: calc(-1 * var(--rs-pole-down)); width: 10px; border-radius: 5px 5px 0 0;
+  background: linear-gradient(90deg, var(--rs-pole-a), var(--rs-pole-b) 42%, var(--rs-pole-c));
+  transform-origin: 50% 100%;
+  -webkit-mask: linear-gradient(180deg, #000 70%, transparent); mask: linear-gradient(180deg, #000 70%, transparent);
+}
+.rs-pole::before { content: ""; position: absolute; left: -1px; right: -1px; top: 0; height: 6px; border-radius: 5px; background: var(--rs-pole-c); }
+.rs-pole-tall .rs-pole { -webkit-mask: none; mask: none; border-radius: 5px 5px 2px 2px; }
+
+.rs-swing { position: relative; transform-origin: calc(100% + 9px) 50%; transform-style: preserve-3d; will-change: transform; }
+.rs-clamp { position: absolute; right: -13px; width: 15px; height: 7px; border-radius: 2px; background: linear-gradient(180deg, #b8c0c6, #7e868c); box-shadow: 0 1px 0 rgb(0 0 0 / 0.25); }
+.rs-clamp-a { top: 22%; }
+.rs-clamp-b { bottom: 22%; }
+
+.rs-plate {
+  position: relative; overflow: hidden; padding: 4px; border-radius: 8px;
+  background: linear-gradient(168deg, var(--rs-blue-a), var(--rs-blue-b) 55%, var(--rs-blue-c));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.28), inset 0 -2px 0 rgb(0 0 0 / 0.18), 0 16px 26px -14px rgb(8 20 40 / 0.6);
+}
+/* Retroreflective sheen that follows the cursor (RouteFx sets --gx/--gy). */
+.rs-plate::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 250ms;
+  background: radial-gradient(160px circle at var(--gx, 50%) var(--gy, 50%), rgb(255 255 255 / 0.32), transparent 60%);
+}
+.rs:hover .rs-plate::after { opacity: 1; }
+.rs-in {
+  display: grid; grid-template-columns: var(--rs-emblem) 1fr; align-items: center; column-gap: 8px;
+  padding: 5px 14px 7px 8px; border: 2px solid var(--rs-ink); border-radius: 6px; color: var(--rs-ink);
+}
+.rs-emblem { width: var(--rs-emblem); height: var(--rs-emblem); grid-row: 1; }
+.rs-emblem svg { width: 100%; height: 100%; display: block; }
+.rs-kind { grid-row: 1; grid-column: 2; padding-right: calc(var(--rs-emblem) + 8px); text-align: center; font-weight: 800; font-size: var(--rs-kind); letter-spacing: 0.08em; }
+.rs-name { grid-column: 1 / -1; margin-top: 2px; text-align: center; white-space: nowrap; font-weight: 800; font-size: var(--rs-name); line-height: 1.05; letter-spacing: 0.01em; text-shadow: 0 1px 0 rgb(0 0 0 / 0.18); }
+.rs-glint { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 32%, rgb(255 255 255 / 0.65) 48%, rgb(255 255 255 / 0.1) 56%, transparent 66%); transform: translateX(-130%); mix-blend-mode: screen; }
+.rs.rs-shine .rs-glint { animation: rs-glint 1.15s cubic-bezier(.4,0,.2,1) forwards; }
+.rs:hover .rs-glint { animation: rs-glint 0.9s cubic-bezier(.4,0,.2,1); }
+@keyframes rs-glint { from { transform: translateX(-130%); } to { transform: translateX(130%); } }
+
+.rs-note { display: block; margin-top: calc(var(--rs-pole-down) * 0.25 + 6px); max-width: 100%; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
+.rs-pole-tall .rs-note { display: none; }
+
+/* Night: the plate catches headlights. */
+:root[data-theme="dark"] .rs-plate, .tone-navy .rs-plate { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 0 0 1px rgb(130 185 255 / 0.25), 0 0 30px -6px rgb(70 150 255 / 0.55), 0 16px 26px -14px rgb(0 0 0 / 0.7); }
+:root[data-theme="dark"] .rs--dest .rs-plate { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 0 0 1px rgb(255 190 140 / 0.25), 0 0 30px -6px rgb(242 140 60 / 0.5), 0 16px 26px -14px rgb(0 0 0 / 0.7); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .rs-plate { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 0 0 1px rgb(130 185 255 / 0.25), 0 0 30px -6px rgb(70 150 255 / 0.55), 0 16px 26px -14px rgb(0 0 0 / 0.7); }
+  :root:not([data-theme="light"]) .rs--dest .rs-plate { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 0 0 1px rgb(255 190 140 / 0.25), 0 0 30px -6px rgb(242 140 60 / 0.5), 0 16px 26px -14px rgb(0 0 0 / 0.7); }
+}
+
+/* Entrance start state (RouteFx swings the plate out from the pole). */
+html.motion .rs:not(.rs-ready) .rs-swing { opacity: 0; }
+html.motion .rs:not(.rs-ready) .rs-pole { transform: scaleY(0); }
+
+/* Hover wobble and click spin, hinged on the pole. */
+@media (prefers-reduced-motion: no-preference) {
+  .rs.rs-wobble .rs-swing { animation: rs-wobble 1s cubic-bezier(.3,.7,.4,1); }
+  .rs.rs-spin .rs-swing { animation: rs-spin 1.3s cubic-bezier(.15,.8,.25,1); }
+}
+@keyframes rs-wobble { 0% { transform: rotateY(0); } 18% { transform: rotateY(-22deg); } 40% { transform: rotateY(12deg); } 60% { transform: rotateY(-6deg); } 80% { transform: rotateY(2.5deg); } 100% { transform: rotateY(0); } }
+@keyframes rs-spin { 0% { transform: rotateY(0); } 70% { transform: rotateY(-375deg); } 85% { transform: rotateY(-356deg); } 100% { transform: rotateY(-360deg); } }
+
+/* Sign slots */
+/* The hero sign stands on the street's pavement: the pole runs from the plate down to the kerb. */
+.street-sign { position: absolute; right: 4%; bottom: 0; z-index: 3; }
+.street-sign .rs { --rs-pole-down: 72px; margin-bottom: var(--rs-pole-down); }
+@media (min-width: 1024px) { .street-sign .rs--sm { --rs-name: 22px; --rs-kind: 12px; --rs-emblem: 22px; --rs-pole-down: 84px; } }
+/* Phones keep the road chip under the street, so the pole stops at the kerb above it. */
+@media (max-width: 639px) { .street-sign { right: 3%; bottom: 40px; } .street-sign .rs { --rs-pole-down: 30px; } }
+.section-sign { flex-basis: 100%; order: -1; margin-bottom: 18px; }
+@media (min-width: 640px) { .section-sign { flex-basis: auto; order: 0; margin-bottom: 26px; } }
+
+/* ---------- Route HUD ---------- */
+.rhud {
+  position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 40; max-width: calc(100vw - 32px);
+  opacity: 0; transform: translateY(24px) scale(0.96); pointer-events: none;
+  transition: opacity 400ms ease, transform 600ms cubic-bezier(.2,.8,.2,1);
+}
+.rhud.on { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 1024px) { .rhud { left: 24px; bottom: 24px; } }
+.rhud-card {
+  width: 292px; max-width: 100%; padding: 7px; border-radius: 18px; border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 86%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3);
+  box-shadow: 0 18px 40px -22px rgb(var(--shadow) / 0.65);
+  transition: width 500ms cubic-bezier(.2,.8,.2,1);
+}
+.rhud.collapsed .rhud-card { width: 224px; }
+.rhud-sign {
+  display: flex; align-items: center; gap: 8px; width: 100%; padding: 3px; border-radius: 10px; text-align: left;
+  background: linear-gradient(168deg, #2b7bd2, #1c5daa 55%, #164c8d); color: #f7fbff;
+}
+.rhud.dest .rhud-sign { background: linear-gradient(168deg, #96603b, #74431f 55%, #5b3317); }
+.rhud-sign-in { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; padding: 4px 10px 4px 6px; border: 1.5px solid #f7fbff; border-radius: 7px; }
+.rhud-emblem { width: 22px; height: 22px; flex-shrink: 0; }
+.rhud-emblem svg { width: 100%; height: 100%; display: block; }
+.rhud-text { display: grid; min-width: 0; line-height: 1.1; }
+.rhud-kind { font-size: 9.5px; font-weight: 800; letter-spacing: 0.12em; opacity: 0.85; }
+.rhud-name { font-size: 15px; font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; }
+.flap-c { position: relative; display: inline-block; min-width: 0.6em; padding: 0 0.04em; margin: 0 0.5px; text-align: center; border-radius: 2px; background: rgb(0 0 0 / 0.16); }
+.flap-c::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgb(0 0 0 / 0.32); }
+.flap-c.sp { background: none; }
+.flap-c.sp::after { display: none; }
+
+.rhud-more { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 500ms cubic-bezier(.2,.8,.2,1), opacity 300ms; }
+.rhud.collapsed .rhud-more { grid-template-rows: 0fr; opacity: 0; }
+.rhud-more > div { overflow: hidden; min-height: 0; }
+.rhud-line { display: flex; justify-content: space-between; gap: 8px; padding: 8px 6px 0; font-size: 11.5px; font-weight: 600; color: var(--text-secondary); }
+.rhud-line b { color: var(--text-display); font-weight: 800; }
+.rhud-arrive { padding: 8px 6px 0; font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--text-primary); }
+.rhud-arrive b { color: var(--success); }
+
+.rhud-rail { position: relative; height: 22px; margin: 6px 10px 2px; }
+.rhud-rail::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 3px; background: var(--seg-empty); }
+.rhud-fill { position: absolute; left: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 3px; background: linear-gradient(90deg, var(--leaf), var(--orange)); width: 0; }
+.rhud-dot { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; padding: 0; border-radius: 50%; background: var(--surface); border: 2.5px solid var(--border-visible); cursor: pointer; transition: border-color 300ms, background 300ms, transform 250ms; }
+.rhud-dot.on { border-color: var(--leaf); }
+.rhud-dot.cur { background: var(--orange); border-color: var(--orange); transform: scale(1.25); }
+.rhud-dot:hover { transform: scale(1.4); }
+.rhud-dot .tip { position: absolute; bottom: 150%; left: 50%; transform: translateX(-50%) translateY(4px); white-space: nowrap; padding: 3px 8px; border-radius: 6px; background: #1c5daa; color: #fff; font-size: 11px; font-weight: 800; opacity: 0; pointer-events: none; transition: opacity 200ms, transform 200ms; }
+.rhud-dot:hover .tip, .rhud-dot:focus-visible .tip { opacity: 1; transform: translateX(-50%); }
+.rhud-bus { position: absolute; top: 50%; left: 0; width: 22px; height: 16px; margin: -15px 0 0 -11px; border-radius: 4px 6px 3px 3px; background: var(--leaf); box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.18); pointer-events: none; }
+.rhud-bus::before { content: ""; position: absolute; left: 3px; right: 6px; top: 3px; height: 5px; border-radius: 2px; background: #dff3ff; }
+.rhud-bus::after { content: ""; position: absolute; left: 3px; right: 3px; bottom: -3px; height: 5px; background: radial-gradient(circle at 4px 2.5px, #13345e 2.4px, transparent 2.6px), radial-gradient(circle at calc(100% - 4px) 2.5px, #13345e 2.4px, transparent 2.6px); }
+
+/* Phones: the HUD covers reading space, so it shows the sign and one line, no rail. */
+@media (max-width: 639px) {
+  .rhud-rail { display: none; }
+  .rhud-card { width: auto; }
+  .rhud.collapsed .rhud-card { width: auto; }
+  .rhud-name { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rhud, .rhud-card, .rhud-more { transition: none; }
+}
